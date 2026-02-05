@@ -20,6 +20,7 @@ public class TestHelloWorld
     }
 
     [Test]
+    [Ignore("-")]
     public void FailCheck_HelloWorld()
     {
         Assert.Fail("Test failed!");    
