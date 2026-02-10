@@ -12,7 +12,7 @@
           "NUnit": "4.4.0",
           "NUnit.ConsoleRunner": "3.22.0",
           "NUnit3TestAdapter": "6.1.0",
-          "PersonalAccount.Domain": "1.0.0"
+          "PersonalAccount.Domain": "1.0.0.1"
         },
         "runtime": {
           "PersonalAccount.UnitTests.dll": {}
@@ -593,9 +593,12 @@
           "System.Collections.Immutable": "8.0.0"
         }
       },
-      "PersonalAccount.Domain/1.0.0": {
+      "PersonalAccount.Domain/1.0.0.1": {
         "runtime": {
-          "PersonalAccount.Domain.dll": {}
+          "PersonalAccount.Domain.dll": {
+            "assemblyVersion": "1.0.0.1",
+            "fileVersion": "1.0.0.1"
+          }
         }
       }
     }
@@ -732,7 +735,7 @@
       "path": "system.reflection.metadata/8.0.0",
       "hashPath": "system.reflection.metadata.8.0.0.nupkg.sha512"
     },
-    "PersonalAccount.Domain/1.0.0": {
+    "PersonalAccount.Domain/1.0.0.1": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

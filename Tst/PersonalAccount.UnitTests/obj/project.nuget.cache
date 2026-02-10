@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "9AOAURy0xm9gnz3tgI2sCYUpcKelCyDQnx19MPkJAkHPpEqhNH/1X1RqCwSzf4A+vNoXK20VndS9f5BF2pccLg==",
+  "dgSpecHash": "XvLlFpuSCMw=",
   "success": true,
-  "projectFilePath": "/home/valex/Projects/PersonalAccount2026/Tst/PersonalAccount.UnitTests/PersonalAccount.UnitTests.csproj",
+  "projectFilePath": "/home/valex/Projects/IGU/PersonalAccount2026/Tst/PersonalAccount.UnitTests/PersonalAccount.UnitTests.csproj",
   "expectedPackageFiles": [
     "/home/valex/.nuget/packages/microsoft.applicationinsights/2.23.0/microsoft.applicationinsights.2.23.0.nupkg.sha512",
     "/home/valex/.nuget/packages/microsoft.codecoverage/18.0.1/microsoft.codecoverage.18.0.1.nupkg.sha512",

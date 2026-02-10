@@ -1,8 +1,6 @@
 ﻿using PersonalAccount.Domain;
 
-var class1 = new Class1();
-var result = class1.GetHelloWorld();
-Console.WriteLine(result);
+CurrentApplication.ShowLogo();
 
 while (true)
 {

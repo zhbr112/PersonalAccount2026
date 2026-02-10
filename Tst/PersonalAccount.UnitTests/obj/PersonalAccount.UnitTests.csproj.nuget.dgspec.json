@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/valex/Projects/PersonalAccount2026/Tst/PersonalAccount.UnitTests/PersonalAccount.UnitTests.csproj": {}
+    "/home/valex/Projects/IGU/PersonalAccount2026/Tst/PersonalAccount.UnitTests/PersonalAccount.UnitTests.csproj": {}
   },
   "projects": {
-    "/home/valex/Projects/PersonalAccount2026/Src/PersonalAccount.Domain/PersonalAccount.Domain.csproj": {
-      "version": "1.0.0",
+    "/home/valex/Projects/IGU/PersonalAccount2026/Src/PersonalAccount.Domain/PersonalAccount.Domain.csproj": {
+      "version": "1.0.0.1",
       "restore": {
-        "projectUniqueName": "/home/valex/Projects/PersonalAccount2026/Src/PersonalAccount.Domain/PersonalAccount.Domain.csproj",
+        "projectUniqueName": "/home/valex/Projects/IGU/PersonalAccount2026/Src/PersonalAccount.Domain/PersonalAccount.Domain.csproj",
         "projectName": "PersonalAccount.Domain",
-        "projectPath": "/home/valex/Projects/PersonalAccount2026/Src/PersonalAccount.Domain/PersonalAccount.Domain.csproj",
+        "projectPath": "/home/valex/Projects/IGU/PersonalAccount2026/Src/PersonalAccount.Domain/PersonalAccount.Domain.csproj",
         "packagesPath": "/home/valex/.nuget/packages/",
-        "outputPath": "/home/valex/Projects/PersonalAccount2026/Src/PersonalAccount.Domain/obj/",
+        "outputPath": "/home/valex/Projects/IGU/PersonalAccount2026/Src/PersonalAccount.Domain/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/valex/.nuget/NuGet/NuGet.Config"
@@ -32,6 +32,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -53,18 +58,18 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.122/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.417/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "/home/valex/Projects/PersonalAccount2026/Tst/PersonalAccount.UnitTests/PersonalAccount.UnitTests.csproj": {
+    "/home/valex/Projects/IGU/PersonalAccount2026/Tst/PersonalAccount.UnitTests/PersonalAccount.UnitTests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/valex/Projects/PersonalAccount2026/Tst/PersonalAccount.UnitTests/PersonalAccount.UnitTests.csproj",
+        "projectUniqueName": "/home/valex/Projects/IGU/PersonalAccount2026/Tst/PersonalAccount.UnitTests/PersonalAccount.UnitTests.csproj",
         "projectName": "PersonalAccount.UnitTests",
-        "projectPath": "/home/valex/Projects/PersonalAccount2026/Tst/PersonalAccount.UnitTests/PersonalAccount.UnitTests.csproj",
+        "projectPath": "/home/valex/Projects/IGU/PersonalAccount2026/Tst/PersonalAccount.UnitTests/PersonalAccount.UnitTests.csproj",
         "packagesPath": "/home/valex/.nuget/packages/",
-        "outputPath": "/home/valex/Projects/PersonalAccount2026/Tst/PersonalAccount.UnitTests/obj/",
+        "outputPath": "/home/valex/Projects/IGU/PersonalAccount2026/Tst/PersonalAccount.UnitTests/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/valex/.nuget/NuGet/NuGet.Config"
@@ -79,8 +84,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "/home/valex/Projects/PersonalAccount2026/Src/PersonalAccount.Domain/PersonalAccount.Domain.csproj": {
-                "projectPath": "/home/valex/Projects/PersonalAccount2026/Src/PersonalAccount.Domain/PersonalAccount.Domain.csproj"
+              "/home/valex/Projects/IGU/PersonalAccount2026/Src/PersonalAccount.Domain/PersonalAccount.Domain.csproj": {
+                "projectPath": "/home/valex/Projects/IGU/PersonalAccount2026/Src/PersonalAccount.Domain/PersonalAccount.Domain.csproj"
               }
             }
           }
@@ -89,6 +94,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -128,7 +138,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.122/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.417/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
