@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "2Le5kx3vyH4=",
+  "dgSpecHash": "4zCuDX90X4ADuoun3yQd+yBz30lUe4Ht6pJeJPjzlhVngc3z9Sd7uUn2PuzB0Izp7QujqsDVCXAlg2aAXfNzGw==",
   "success": true,
-  "projectFilePath": "/home/valex/Projects/IGU/PersonalAccount2026/Src/PersonalAccount.Domain/PersonalAccount.Domain.csproj",
+  "projectFilePath": "/home/valex/Projects/PersonalAccount2026/Src/PersonalAccount.Domain/PersonalAccount.Domain.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
