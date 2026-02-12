@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using PersonalAccount.Domain;
 using PersonalAccount.Domain.Core;
@@ -84,5 +85,8 @@ public class ApplicationTests
         Assert.That(properties.Any());        
         var attribute = properties.First().GetCustomAttribute< PhoneTemplateAttribute >();
         Assert.That(!string.IsNullOrEmpty( attribute!.Template));
+
+        var match = new Regex(attribute!.Template);
+        Assert.That(match.IsMatch(domain.Phone!) == true);
     }
 }
