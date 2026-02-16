@@ -5,7 +5,7 @@ namespace PersonalAccount.Domain.Core;
 /// <summary>
 /// Общий интерфейс для работы с моделями.
 /// </summary>
-public interface IId
+public interface IId : IModel
 {
     /// <summary>
     /// Уникальный код.
