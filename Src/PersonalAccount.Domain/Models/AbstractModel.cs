@@ -75,15 +75,21 @@ public abstract class AbstractModel : IErrorText, IId
             }
         }                
 
-        // 3. Проверим состав полей. Содержат ли они так же модели. Рекурсивно.
+        // 3. Проверяем поля рекурсивно
         var contains = this.GetType()
-                        .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                        .Where(x => x.PropertyType.IsAssignableFrom(typeof(AbstractModel)))
-                        .ToList();
+                        .GetProperties(BindingFlags.Public | BindingFlags.Instance);
         foreach(var property in contains)
         {
             var value = property.GetValue(this) as AbstractModel;
-            if(value is not null) return value.Validate();
+            if(value is not null) 
+            {
+                result = value.Validate();
+             
+                if(!result) {
+                    _errorText = value.ErrorText;
+                    return result;
+                }
+            }
         }
 
         // Ошибок валидации не содержит.
