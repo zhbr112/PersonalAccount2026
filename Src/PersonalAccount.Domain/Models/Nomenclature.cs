@@ -6,7 +6,7 @@ namespace PersonalAccount.Domain.Models;
 /// <summary>
 /// Модель номенклатуры.
 /// </summary>
-public class Nomenclature : AbstractModel
+public class Nomenclature : DomainModel
 {
     /// <summary>
     /// Наименование,

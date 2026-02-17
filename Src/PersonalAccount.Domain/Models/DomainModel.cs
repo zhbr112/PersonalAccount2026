@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Text.Json.Serialization;
@@ -8,9 +7,9 @@ using PersonalAccount.Domain.Core;
 namespace PersonalAccount.Domain.Models;
 
 /// <summary>
-/// Абстрактный класс модели.
+/// Абстрактный класс доменной модели.
 /// </summary>
-public abstract class AbstractModel : IErrorText, IId
+public abstract class DomainModel : IErrorText, IId
 {
     protected string _errorText = string.Empty;
 
@@ -80,7 +79,7 @@ public abstract class AbstractModel : IErrorText, IId
                         .GetProperties(BindingFlags.Public | BindingFlags.Instance);
         foreach(var property in contains)
         {
-            var value = property.GetValue(this) as AbstractModel;
+            var value = property.GetValue(this) as DomainModel;
             if(value is not null) 
             {
                 result = value.Validate();

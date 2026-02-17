@@ -117,7 +117,7 @@ public class ApplicationTests
     }
 
     /// <summary>
-    /// Комплектная проверка атрибутов.
+    /// Комплектная проверка. Отрицательный сценарий.
     /// </summary>
     [Test]
     public void Create_Transaction_FalseValidate()
@@ -141,5 +141,48 @@ public class ApplicationTests
         Assert.That(result == false);
         Assert.That(transaction.IsError == true);
         Console.WriteLine(transaction.ErrorText);
+    }
+
+    /// <summary>
+    /// Комплексная проверка. Положительный сценарий.
+    /// </summary>
+    [Test]
+    public void Create_Transaction_TrueValidate()
+    {
+          // Подготовка
+        var transaction = new Transaction()
+        {
+            Emploee = new Emploee() 
+            { 
+                Name = "test" , 
+                Phone = "+79041518166", 
+                Owner = new Company() { Name = "test", INN = "1234567890", Address = "90000, Ленинградская обл., Ломоносовский р-н, г. Ломоносов, ул. Советская, д. 12"},
+            },
+            Owner = new Company() 
+            { 
+                Name = "test", 
+                INN = "1234567890", 
+                Address = "90000, Ленинградская обл., Ломоносовский р-н, г. Ломоносов, ул. Советская, д. 12"
+            },
+            Type = TransactionType.Sale,
+            Quantuty = 1, Price = 1 , 
+            Discount = 0, 
+            Period = DateTimeOffset.Now,
+            Nomenclature = new Nomenclature() 
+            { 
+                Name = "Test", 
+                Category = new Category()
+                { 
+                    Name = "Test", 
+                    Owner = new Company() { Name = "test", INN = "1234567890", Address = "90000, Ленинградская обл., Ломоносовский р-н, г. Ломоносов, ул. Советская, д. 12"},
+                }}
+        };
+
+        // Действие
+        var result = transaction.Validate();
+
+        // Проверка
+        Assert.That(result == true);
+        Assert.That(transaction.IsError == false);
     }
 }

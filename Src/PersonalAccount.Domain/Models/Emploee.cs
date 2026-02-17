@@ -6,7 +6,7 @@ namespace PersonalAccount.Domain.Models;
 /// <summary>
 /// Модель сотрудника.
 /// </summary>
-public class Emploee : AbstractModel
+public class Emploee : DomainModel
 {
     /// <summary>
     /// Наименование сотрудника.

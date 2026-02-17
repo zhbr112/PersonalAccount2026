@@ -5,7 +5,7 @@ namespace PersonalAccount.Domain.Models;
 /// <summary>
 /// Модель категории номераклатуры.
 /// </summary>
-public class Category : AbstractModel
+public class Category : DomainModel
 {
     /// <summary>
     /// Наименование категории.

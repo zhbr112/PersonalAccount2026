@@ -7,7 +7,7 @@ namespace PersonalAccount.Domain.Models;
 /// <summary>
 /// Модель транзакции.
 /// </summary>
-public class Transaction : AbstractModel
+public class Transaction : DomainModel
 {
     /// <summary>
     /// Тип транзакции.
