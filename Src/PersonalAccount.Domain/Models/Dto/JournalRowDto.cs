@@ -56,4 +56,7 @@ public class JournalRowDto : IDto
     /// Сумма скидки.
     /// </summary>
     public double Discount {get;set;}
+
+    public override string ToString()
+        => $"{Period}:Транзакция - {Quantity * Price}";
 }

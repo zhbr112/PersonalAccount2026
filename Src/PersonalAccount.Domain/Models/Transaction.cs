@@ -53,4 +53,5 @@ public class Transaction : DomainModel
     /// Сумма скидки.
     /// </summary>
     public double Discount {get;set;}
+
 }

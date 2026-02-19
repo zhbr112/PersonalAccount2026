@@ -26,4 +26,5 @@ public class Emploee : DomainModel
     /// </summary>
     [Required]
     public Company Owner {get;set;} = null!;
+ 
 }
