@@ -32,11 +32,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/valex/Projects/IGU/PersonalAccount2026/Src/PersonalAccount.Console/PersonalAccount.Console.csproj",
+      "projectUniqueName": "/home/valex/Projects/PersonalAccount2026/Src/PersonalAccount.Console/PersonalAccount.Console.csproj",
       "projectName": "PersonalAccount.Console",
-      "projectPath": "/home/valex/Projects/IGU/PersonalAccount2026/Src/PersonalAccount.Console/PersonalAccount.Console.csproj",
+      "projectPath": "/home/valex/Projects/PersonalAccount2026/Src/PersonalAccount.Console/PersonalAccount.Console.csproj",
       "packagesPath": "/home/valex/.nuget/packages/",
-      "outputPath": "/home/valex/Projects/IGU/PersonalAccount2026/Src/PersonalAccount.Console/obj/",
+      "outputPath": "/home/valex/Projects/PersonalAccount2026/Src/PersonalAccount.Console/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "/home/valex/.nuget/NuGet/NuGet.Config"
@@ -51,8 +51,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/home/valex/Projects/IGU/PersonalAccount2026/Src/PersonalAccount.Domain/PersonalAccount.Domain.csproj": {
-              "projectPath": "/home/valex/Projects/IGU/PersonalAccount2026/Src/PersonalAccount.Domain/PersonalAccount.Domain.csproj"
+            "/home/valex/Projects/PersonalAccount2026/Src/PersonalAccount.Domain/PersonalAccount.Domain.csproj": {
+              "projectPath": "/home/valex/Projects/PersonalAccount2026/Src/PersonalAccount.Domain/PersonalAccount.Domain.csproj"
             }
           }
         }
@@ -61,11 +61,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -87,7 +82,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.417/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.123/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
