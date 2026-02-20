@@ -20,8 +20,11 @@ psql -U admin -h localhost -p 5433
 
 ![](mssql.png)
 
+---
+
 - Postgre
 
 ![](postgres.png)
-**Порт** 5433
+
+> **Порт** 5433
 
