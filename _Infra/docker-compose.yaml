@@ -27,7 +27,7 @@ services:
     volumes:
       - ./pgdata:/var/lib/postgresql/data
     ports:
-      - "${POSTGRESQL_PORT:-5433}:5433"
+      - "${POSTGRESQL_PORT:-5432}:5432"
     restart: always
 
 
