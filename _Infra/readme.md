@@ -14,9 +14,10 @@ sudo docker compose up -d
 psql -U admin -h localhost -p 5433
 ```
 
-## Параметры подключения
+#### Параметры подключения
 
 - MS SQL
+
 ![](mssql.png)
 
 - Postgre
