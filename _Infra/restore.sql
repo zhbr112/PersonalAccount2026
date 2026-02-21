@@ -3,9 +3,9 @@ CREATE DATABASE PersonalAccount
 GO
 
 -- Параметры подключения
-localhost
-master
-sa / 123456
+--localhost
+--master
+--sa / 123456
 
 
 -- Переключиться на системную базу данных
@@ -45,12 +45,9 @@ GO
 select Top 10 * from journal as t1
 inner join transtype as t2 on t1.transtype = t2.transtypeid
 
-receiptn
-id - уникальный код
-101 - код номенклатурв
-Начало / окончание -  код сотрудника
+--id - уникальный код
 
-
+-- Пример выборки данных
 select
     top 10
     

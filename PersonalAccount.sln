@@ -23,6 +23,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Infra", "_Infra", "{88B07564-D1D9-1DE6-B7C7-2696864101C1}"
 	ProjectSection(SolutionItems) = preProject
 		Dockerfile = Dockerfile
+		_Infra\readme.md = _Infra\readme.md
+		_Infra\restore.sql = _Infra\restore.sql
+		_Infra\docker-compose.yaml = _Infra\docker-compose.yaml
 	EndProjectSection
 EndProject
 Global
