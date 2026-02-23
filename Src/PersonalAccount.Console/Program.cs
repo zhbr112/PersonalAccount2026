@@ -1,12 +1,8 @@
-﻿using System.Runtime.CompilerServices;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using PersonalAccount.Console.Models;
 using PersonalAccount.Domain;
-using System.Data.Common;
 using Microsoft.Data.SqlClient;
 using System.Data;
-using PersonalAccount.Domain.Models;
-using System.Runtime.InteropServices;
 using PersonalAccount.Domain.Models.Dto;
 
 CurrentApplication.ShowLogo();
@@ -49,7 +45,7 @@ for(int position = 0; position < table.Rows.Count; position++)
     var dto = new JournalRowDto();
 
     // Наполняем данными
-    dto.Period = Convert.ToDateTime( table.Rows[position][ Helper.GetSqlField( dto, nameof(JournalRowDto.Period) ]; // dater
+    dto.Period = Convert.ToDateTime( table.Rows[position][ "dater" ]); // dater
     dto.Quantity = Convert.ToDouble( table.Rows[position]["quantity"] );
     dto.Price = Convert.ToDouble( table.Rows[position]["price"] );
 
@@ -58,7 +54,7 @@ for(int position = 0; position < table.Rows.Count; position++)
 
 
 
-    
+// Пауза    
 while (true)
 {
     await Task.Delay(TimeSpan.FromHours(1));
