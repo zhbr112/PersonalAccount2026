@@ -31,7 +31,7 @@ public class MappingTests
             new DataColumn()
             { 
                 ColumnName = "dater", 
-                DataType= typeof(DateTimeOffset)},
+                DataType= typeof(DateTime)},
 
             new DataColumn()
             {
