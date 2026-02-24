@@ -355,3 +355,6 @@ MigrationBackup/
 
 pgdata/
 /pgdata
+
+data/
+/data
