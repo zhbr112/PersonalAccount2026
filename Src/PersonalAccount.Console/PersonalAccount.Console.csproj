@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="../PersonalAccount.Common/PersonalAccount.Common.csproj" />
     <ProjectReference Include="../PersonalAccount.Domain/PersonalAccount.Domain.csproj" />
   </ItemGroup>
 
@@ -24,6 +25,11 @@
       <Link>appsettings.json</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Logics/" />
   </ItemGroup>
 
 
