@@ -15,7 +15,7 @@ namespace PersonalAccount.Console.Logics;
 public class JournalRepository : IRepository<JournalRowDto>
 {
     // Шаблон SQL запроса
-    private string _sql = @"
+    private const string _sql = @"
        select top {0}
             -- Уникальный номер транзакции
             transnumber,

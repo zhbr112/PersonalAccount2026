@@ -34,22 +34,26 @@ public class RepositoryTests
     }
 
     /// <summary>
-    /// Проверить работу репозитория для выборки данных.
+    /// Простой тест для замера производительности.
     /// </summary>
+    /// <param name="rows"></param>
     /// <returns></returns>
     [Test]
-    public async Task GetRows_JournalRepository_Any()
+    [TestCase(100)]
+    [TestCase(1000)]
+    [TestCase(10000)]
+    public async Task GetRows_JournalRepository_Fetch(int rows)
     {
         // Подготовка
-        using var connect = new SqlConnection (_options.ConnectionString);
+        using var connect = new SqlConnection(_options.ConnectionString);
         var repo = new JournalRepository();
 
         // Действие
-        var result = await repo.GetRows(connect, new Domain.Models.LoadingSettings() { BatchSize = 100});
+        var result = await repo.GetRows(connect, new Domain.Models.LoadingSettings() { BatchSize = rows });
 
         // Проверки
         Assert.That(result is not null);
         Assert.That(result!.Any());
-        Assert.That(result!.Count() == 100);
+        Assert.That(result!.Count() == rows);
     }
 }
