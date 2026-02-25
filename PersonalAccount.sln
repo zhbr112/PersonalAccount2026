@@ -32,6 +32,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonalAccount.Common", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonalAccount.IntegrationTests", "Tst\PersonalAccount.IntegrationTests\PersonalAccount.IntegrationTests.csproj", "{CE505E69-66D2-424F-AAEB-1C8E8C8A968E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Histories", "Histories", "{759783A3-D1DC-8DF6-B739-69DC21676ADC}"
+	ProjectSection(SolutionItems) = preProject
+		Step01.md = Step01.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,5 +73,6 @@ Global
 		{A1B630B0-8E1A-4E6E-A1C7-A8C2DAF87974} = {3DF1C3C8-F376-4341-A407-C2B5826E8962}
 		{FA1A9665-9E25-47BA-9589-93F0B6FB3980} = {3DF1C3C8-F376-4341-A407-C2B5826E8962}
 		{CE505E69-66D2-424F-AAEB-1C8E8C8A968E} = {311391D7-9304-4CBE-9B02-7B124A03041B}
+		{759783A3-D1DC-8DF6-B739-69DC21676ADC} = {5B4C5E0E-B8F0-F1E8-C7D4-D30CFEBBB4A0}
 	EndGlobalSection
 EndGlobal
