@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="../../Src/PersonalAccount.Common/PersonalAccount.Common.csproj" />
     <ProjectReference Include="../../Src/PersonalAccount.Console/PersonalAccount.Console.csproj" />
+    <ProjectReference Include="../../Src/PersonalAccount.Data/PersonalAccount.Data.csproj" />
     <ProjectReference Include="../../Src/PersonalAccount.Domain/PersonalAccount.Domain.csproj" />
   </ItemGroup>
 

@@ -37,6 +37,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Histories", "Histories", "{
 		Step01.md = Step01.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonalAccount.Data", "Src\PersonalAccount.Data\PersonalAccount.Data.csproj", "{18BB4D91-9BFF-423D-A526-7EACE8FE2173}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonalAccount.Api", "Src\PersonalAccount.Api\PersonalAccount.Api.csproj", "{80FB1570-0D8C-4B96-979C-CFAFD69C1074}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +67,14 @@ Global
 		{CE505E69-66D2-424F-AAEB-1C8E8C8A968E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE505E69-66D2-424F-AAEB-1C8E8C8A968E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE505E69-66D2-424F-AAEB-1C8E8C8A968E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18BB4D91-9BFF-423D-A526-7EACE8FE2173}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18BB4D91-9BFF-423D-A526-7EACE8FE2173}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18BB4D91-9BFF-423D-A526-7EACE8FE2173}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18BB4D91-9BFF-423D-A526-7EACE8FE2173}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80FB1570-0D8C-4B96-979C-CFAFD69C1074}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80FB1570-0D8C-4B96-979C-CFAFD69C1074}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80FB1570-0D8C-4B96-979C-CFAFD69C1074}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80FB1570-0D8C-4B96-979C-CFAFD69C1074}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -74,5 +86,7 @@ Global
 		{FA1A9665-9E25-47BA-9589-93F0B6FB3980} = {3DF1C3C8-F376-4341-A407-C2B5826E8962}
 		{CE505E69-66D2-424F-AAEB-1C8E8C8A968E} = {311391D7-9304-4CBE-9B02-7B124A03041B}
 		{759783A3-D1DC-8DF6-B739-69DC21676ADC} = {5B4C5E0E-B8F0-F1E8-C7D4-D30CFEBBB4A0}
+		{18BB4D91-9BFF-423D-A526-7EACE8FE2173} = {3DF1C3C8-F376-4341-A407-C2B5826E8962}
+		{80FB1570-0D8C-4B96-979C-CFAFD69C1074} = {3DF1C3C8-F376-4341-A407-C2B5826E8962}
 	EndGlobalSection
 EndGlobal
