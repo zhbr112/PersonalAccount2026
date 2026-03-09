@@ -6,7 +6,7 @@ namespace PersonalAccount.Common.Core;
 /// <summary>
 /// Репозиторий для работы с настройками загрузки данных
 /// </summary>
-public interface ILoadingSettingsRepository
+public interface ICompanySettingsRepository
 {
     /// <summary>
     /// Сохранить настройки
@@ -14,7 +14,7 @@ public interface ILoadingSettingsRepository
     /// <param name="setting"></param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<bool> Save(LoadingSettings setting,  CancellationToken token);
+    public Task Save(LoadingSettings setting,  CancellationToken token);
 
     /// <summary>
     /// Загрузить настройки

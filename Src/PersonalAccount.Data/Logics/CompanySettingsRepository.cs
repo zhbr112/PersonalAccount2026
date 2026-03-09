@@ -1,15 +1,13 @@
-using System;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using PersonalAccount.Common.Core;
 using PersonalAccount.Domain.Models;
 
 namespace PersonalAccount.Data.Logics;
 
 /// <summary>
-/// Реализация интерфейса <see cref="ILoadingSettingsRepository"/>
+/// Реализация интерфейса <see cref="ICompanySettingsRepository"/>
 /// </summary>
-public class LoadingSettingsRepository : ILoadingSettingsRepository
+public class CompanySettingsRepository : ICompanySettingsRepository
 {
     /// <summary>
     /// Загрузить настройки
@@ -17,7 +15,6 @@ public class LoadingSettingsRepository : ILoadingSettingsRepository
     /// <param name="company"></param>
     /// <param name="token"></param>
     /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
     public async Task<LoadingSettings> Load(Company company, CancellationToken token)
     {
         var context = new PersonalAccountContext();
@@ -37,9 +34,15 @@ public class LoadingSettingsRepository : ILoadingSettingsRepository
     /// <param name="setting"></param>
     /// <param name="token"></param>
     /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public Task<bool> Save(LoadingSettings setting, CancellationToken token)
+    public async Task Save(LoadingSettings setting, CancellationToken token)
     {
-        throw new NotImplementedException();
-    }
+        var context = new PersonalAccountContext();
+        var companyId = setting.Owner?.Id ?? throw new InvalidDataException("Невозможно сохранить настройки т.к. нет информации об организации!");
+        var company = context.Companies.FirstOrDefault(x => x.Id == companyId)
+            ?? throw new InvalidDataException($"Не найдена организация по коду {companyId}!");
+
+        var text =     JsonSerializer.Serialize(setting);
+        company.LoadOptions = text;
+        await context.SaveChangesAsync(token);
+   }
 }

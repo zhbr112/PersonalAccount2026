@@ -12,7 +12,7 @@ namespace PersonalAccount.Console.Logics;
 /// <summary>
 /// Реализация интерфейса <see cref="IRepository"/>
 /// </summary>
-public class JournalRepository : IRepository<JournalRowDto>
+public class JournalRepository : IClientRepository<JournalRowDto>
 {
     // Шаблон SQL запроса
     private const string _sql = @"
