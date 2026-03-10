@@ -21,18 +21,32 @@ public class RevenueReportService : IRevenueReportService
         if(!transactions.Any()) return Task.FromResult(  Enumerable.Empty<RevenueDto>() );
 
         // Все скидки
-        var allDiscount = transactions
-                            .Where(x => x.Type == Domain.Core.TransactionType.RefundPayment)
+        var calcDiscountTask = Task.Run( () =>
+        {
+            var allDiscount = transactions
                             .GroupBy(x => x.Period.Date)
                             .Select(x => new {
                                 Key  = x.Key,
-                                Value = x.Sum(t => t.Price * t.Quantuty)
+                                Value = x.Sum(t => t.Discount)
                             })
                             .ToDictionary(x => x.Key, x => x.Value);
+
+            return allDiscount;                
+        });
+     
 
         // Рассчитать все банковские оплаты
         var calcBankTask = Task.Run( () =>
         {
+            var allDiscount = transactions
+                            .Where(x => x.Type == Domain.Core.TransactionType.BankPayment)
+                            .GroupBy(x => x.Period.Date)
+                            .Select(x => new {
+                                Key  = x.Key,
+                                Value = x.Sum(t => t.Discount)
+                            })
+                            .ToDictionary(x => x.Key, x => x.Value);
+
             var allPayments = transactions
                             .Where(x => x.Type == Domain.Core.TransactionType.BankPayment)
                             .GroupBy(x => x.Period.Date) 
@@ -45,15 +59,24 @@ public class RevenueReportService : IRevenueReportService
             return allPayments.ToDictionary(
                 pair => pair.Key,
                 pair => pair.Value
-                        - (allDiscount.ContainsKey(pair.Key) ?  pair.Value : 0)
+                        - (allDiscount.ContainsKey(pair.Key) ?  allDiscount[ pair.Key ] : 0)
             );
         });
 
         // Рассчитать все оплаты наличными
         var calcCashTask = Task.Run( () =>
         {
-             var allPayments = transactions
-                            .Where(x => x.Type == Domain.Core.TransactionType.BankPayment)
+            var allDiscount = transactions
+                            .Where(x => x.Type == Domain.Core.TransactionType.CashPayment)
+                            .GroupBy(x => x.Period.Date)
+                            .Select(x => new {
+                                Key  = x.Key,
+                                Value = x.Sum(t => t.Discount)
+                            })
+                            .ToDictionary(x => x.Key, x => x.Value);
+
+            var allPayments = transactions
+                            .Where(x => x.Type == Domain.Core.TransactionType.CashPayment)
                             .GroupBy(x => x.Period.Date) 
                             .Select(x => new {
                                 Key  = x.Key,
@@ -64,7 +87,7 @@ public class RevenueReportService : IRevenueReportService
 
             var allRefunds = transactions
                             .Where(x => x.Type == Domain.Core.TransactionType.RefundPayment)
-                              .GroupBy(x => x.Period.Date)
+                            .GroupBy(x => x.Period.Date)
                             .Select(x => new {
                                 Key  = x.Key,
                                 Value = x.Sum(t => t.Price * t.Quantuty)
@@ -81,12 +104,12 @@ public class RevenueReportService : IRevenueReportService
         });
 
         // Ожидаем расчета
-        Task.WaitAll( calcBankTask, calcCashTask);
+        Task.WaitAll( calcBankTask, calcCashTask, calcDiscountTask);
 
         // Получим список всех дат
         var periods = calcBankTask.Result.Keys
                     .Union( calcCashTask.Result.Keys )
-                    .Union( allDiscount.Keys )
+                    .Union( calcDiscountTask.Result.Keys )
                     .Distinct()
                     .ToList();
 
@@ -96,7 +119,7 @@ public class RevenueReportService : IRevenueReportService
             Period = x,
             BankAmount = calcBankTask.Result.ContainsKey( x ) ? calcBankTask.Result[ x ] : 0,
             CashAmount = calcCashTask.Result.ContainsKey( x ) ? calcCashTask.Result[ x ] : 0,
-            DiscountAmount = allDiscount.ContainsKey( x ) ? allDiscount[ x ] : 0,
+            DiscountAmount = calcDiscountTask.Result.ContainsKey( x ) ? calcDiscountTask.Result[ x ] : 0,
             Owner = transactions.FirstOrDefault()?.Owner.Id ?? Guid.Empty
         });
 

@@ -24,6 +24,7 @@ public class RevenueReportServiceTests
     public async Task Create_RevenueReportService_Check()
     {
         // Подготовка
+        const double typicalResult = 820.2;
         var service = new RevenueReportService();
         var creator = new ReportDataCreator();
         creator.BuildTypicalScenario();
@@ -34,7 +35,7 @@ public class RevenueReportServiceTests
 
         // Проверка
         Assert.That(result.Any());
-        Assert.That(result.First().BankAmount == 820.2);
-        Assert.That(result.First().CashAmount == 820.2);
+        Assert.That(result.First().BankAmount == typicalResult);
+        Assert.That(result.First().CashAmount == typicalResult);
     }
 }

@@ -193,7 +193,7 @@ public class ReportDataCreator
                     Emploee = Emploees[0],
                     Period = DateTimeOffset.Now,
                     TicketNumber = "2",
-                    Type = Domain.Core.TransactionType.BankPayment,
+                    Type = Domain.Core.TransactionType.CashPayment,
                     Quantuty = 1,
                     Price = 1000
                 },
