@@ -49,7 +49,7 @@ public class RepositoryTests
         var repo = new JournalRepository();
 
         // Действие
-        var result = await repo.GetRows(connect, new Domain.Models.LoadingSettings() { BatchSize = rows });
+        var result = await repo.GetRows(connect, new Domain.Models.LoadingSettingsModel() { BatchSize = rows });
 
         // Проверки
         Assert.That(result is not null);

@@ -2,31 +2,37 @@ namespace PersonalAccount.Domain.Core;
 
 /// <summary>
 /// Набор типов транзакции.
+/// select * from transtype where transtypeid in (387, 386, 211, 216, 101)
 /// </summary>
 public enum TransactionType : long
 {
     /// <summary>
     /// Продажа.
     /// </summary>
-    Sale = 1 ,
+    Sale = 101 ,
 
     /// <summary>
-    /// Возврат.
+    /// Оплата наличными.
     /// </summary>
-    Return = 2,
+    CashPayment = 211,
 
     /// <summary>
-    /// Сдача
+    /// Оплата банком
     /// </summary>
-    Change = 3,
+    BankPayment = 216,
 
     /// <summary>
     /// Начала рабочей смены.
     /// </summary>
-    StartShift = 4,
+    StartShift = 386,
 
     /// <summary>
     /// Окончание рабочей смены.
     /// </summary>
-    StopShift = 5
+    StopShift = 387,
+
+    /// <summary>
+    /// Сдача
+    /// </summary>
+    RefundPayment = 102
 }

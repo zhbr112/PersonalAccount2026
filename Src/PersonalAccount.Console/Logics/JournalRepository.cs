@@ -31,7 +31,7 @@ public class JournalRepository : IClientRepository<JournalRowDto>
                 else 0 
             end as productid,
             -- Код сотрудника
-            case when transtype in (368, 387, 211, 216)
+            case when transtype in (387, 386, 211, 216)
                 then id
                 else 0
             end as emploeeid,
@@ -47,7 +47,7 @@ public class JournalRepository : IClientRepository<JournalRowDto>
             -- Сумма скидки
             discountamount
         from journal
-        where transtype in (368, 387, 211, 216, 101)
+        where transtype in (387, 386, 211, 216, 101, 102))
         and transnumber >= {1}";
 
     /// <summary>
@@ -56,7 +56,7 @@ public class JournalRepository : IClientRepository<JournalRowDto>
     /// <param name="connection"> Соединение. </param>
     /// <param name="options"> Опции. </param>
     /// <returns></returns>
-    public async Task<IEnumerable<JournalRowDto>> GetRows(DbConnection connection, LoadingSettings options)
+    public async Task<IEnumerable<JournalRowDto>> GetRows(DbConnection connection, LoadingSettingsModel options)
     {
          // Проверки
         ArgumentNullException.ThrowIfNull(connection);

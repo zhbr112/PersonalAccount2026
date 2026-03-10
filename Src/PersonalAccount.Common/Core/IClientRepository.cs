@@ -8,7 +8,7 @@ namespace PersonalAccount.Common.Core;
 /// Интерфейс для работы с клиентскими данными.
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public interface IClientRepository<T> : IRepository<T> where T: IDto
+public interface IClientRepository<T> : IHandler<T> where T: IDto
 {
     /// <summary>
     /// Получить пакет данных согласно настройкам.
@@ -16,5 +16,5 @@ public interface IClientRepository<T> : IRepository<T> where T: IDto
     /// <param name="connection"> Абстрактный коннект. </param>
     /// <param name="options"> Настройки. </param>
     /// <returns></returns>
-    public Task<IEnumerable<T>> GetRows(DbConnection connection, LoadingSettings options);
+    public Task<IEnumerable<T>> GetRows(DbConnection connection, LoadingSettingsModel options);
 }

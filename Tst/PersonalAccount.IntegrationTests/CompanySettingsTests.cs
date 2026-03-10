@@ -25,7 +25,7 @@ public class CompanySettingsTests
     {
         // Подготова
         var repo = new CompanySettingsRepository();
-        var company = new Company()
+        var company = new CompanyModel()
         {
             Id = new Guid( companyId )
         };
@@ -48,11 +48,11 @@ public class CompanySettingsTests
     {
         // Подготовка
         var repo = new CompanySettingsRepository();
-          var company = new Company()
+          var company = new CompanyModel()
         {
             Id = new Guid( companyId )
         };
-        var setting = new LoadingSettings()
+        var setting = new LoadingSettingsModel()
         {
             Owner = company, BatchSize = 10, StartPosition = 0
         };

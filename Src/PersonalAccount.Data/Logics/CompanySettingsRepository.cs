@@ -15,7 +15,7 @@ public class CompanySettingsRepository : ICompanySettingsRepository
     /// <param name="company"></param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public async Task<LoadingSettings> Load(Company company, CancellationToken token)
+    public async Task<LoadingSettingsModel> Load(CompanyModel company, CancellationToken token)
     {
         var context = new PersonalAccountContext();
         var item = context.Companies.FirstOrDefault(x => x.Id == company.Id)
@@ -23,7 +23,7 @@ public class CompanySettingsRepository : ICompanySettingsRepository
         var json = !string.IsNullOrEmpty( item.LoadOptions ) ? item.LoadOptions
             :  throw new InvalidDataException($"Организация по коду {company.Id} содержит некорретные данные по настройкам!");
 
-        var result = JsonSerializer.Deserialize< LoadingSettings >(json)
+        var result = JsonSerializer.Deserialize< LoadingSettingsModel >(json)
             ?? throw new InvalidDataException($"Организация по коду {company.Id} содержит некорретные данные по настройкам!");
         return result;
     }
@@ -34,7 +34,7 @@ public class CompanySettingsRepository : ICompanySettingsRepository
     /// <param name="setting"></param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public async Task Save(LoadingSettings setting, CancellationToken token)
+    public async Task Save(LoadingSettingsModel setting, CancellationToken token)
     {
         var context = new PersonalAccountContext();
         var companyId = setting.Owner?.Id ?? throw new InvalidDataException("Невозможно сохранить настройки т.к. нет информации об организации!");
