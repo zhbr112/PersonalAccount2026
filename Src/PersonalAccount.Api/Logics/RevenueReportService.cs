@@ -19,24 +19,20 @@ public class RevenueReportService : IRevenueReportService
         if(!transactions.Any()) return  Enumerable.Empty<RevenueDto>() ;
 
         // Все скидки
-        var calcDiscountTask = Task.Run( () =>
-        {
-            var allDiscount = transactions
-                            .GroupBy(x => x.Period.Date)
-                            .Select(x => new {
-                                Key  = x.Key,
-                                Value = x.Sum(t => t.Discount)
-                            })
-                            .ToDictionary(x => x.Key, x => x.Value);
-
-            return allDiscount;                
-        });
+        var calcDiscountTask =  Task.Run( () =>
+                                transactions
+                                .GroupBy(x => x.Period.Date)
+                                .Select(x => new {
+                                    Key  = x.Key,
+                                    Value = x.Sum(t => t.Discount)
+                                })
+                                .ToDictionary(x => x.Key, x => x.Value));
      
 
         // Рассчитать все банковские оплаты
         var calcBankTask = Task.Run( () =>
         {
-            var allDiscount = transactions
+            var allDiscounts = transactions
                             .Where(x => x.Type == Domain.Core.TransactionType.BankPayment)
                             .GroupBy(x => x.Period.Date)
                             .Select(x => new {
@@ -57,14 +53,14 @@ public class RevenueReportService : IRevenueReportService
             return allPayments.ToDictionary(
                 pair => pair.Key,
                 pair => pair.Value
-                        - (allDiscount.ContainsKey(pair.Key) ?  allDiscount[ pair.Key ] : 0)
+                        - (allDiscounts.ContainsKey(pair.Key) ?  allDiscounts[ pair.Key ] : 0)
             );
         });
 
         // Рассчитать все оплаты наличными
         var calcCashTask = Task.Run( () =>
         {
-            var allDiscount = transactions
+            var allDiscounts = transactions
                             .Where(x => x.Type == Domain.Core.TransactionType.CashPayment)
                             .GroupBy(x => x.Period.Date)
                             .Select(x => new {
@@ -95,7 +91,7 @@ public class RevenueReportService : IRevenueReportService
             return allPayments.ToDictionary(
                 pair => pair.Key,
                 pair => pair.Value 
-                        - (allDiscount.ContainsKey(pair.Key) ?  allDiscount[pair.Key]  : 0)
+                        - (allDiscounts.ContainsKey(pair.Key) ?  allDiscounts[pair.Key]  : 0)
                         - (allRefunds.ContainsKey(pair.Key) ? allRefunds[pair.Key] : 0)
                 
             );                
