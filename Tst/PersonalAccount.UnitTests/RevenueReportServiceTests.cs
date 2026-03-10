@@ -31,7 +31,7 @@ public class RevenueReportServiceTests
 
 
         // Действие
-        var result = await service.Create( creator.Transactions );
+        var result = service.Create( creator.Transactions );
 
         // Проверка
         Assert.That(result.Any());

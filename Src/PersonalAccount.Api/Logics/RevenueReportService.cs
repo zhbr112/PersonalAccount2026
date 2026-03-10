@@ -1,5 +1,3 @@
-using System;
-using System.Security.Cryptography.X509Certificates;
 using PersonalAccount.Common.Core;
 using PersonalAccount.Domain.Models;
 using PersonalAccount.Domain.Models.Dto;
@@ -16,9 +14,9 @@ public class RevenueReportService : IRevenueReportService
     /// </summary>
     /// <param name="transactions"> Набор транзакций. </param>
     /// <returns></returns>
-    public Task<IEnumerable<RevenueDto>> Create(IEnumerable<TransactionModel> transactions)
+    public IEnumerable<RevenueDto> Create(IEnumerable<TransactionModel> transactions)
     {
-        if(!transactions.Any()) return Task.FromResult(  Enumerable.Empty<RevenueDto>() );
+        if(!transactions.Any()) return  Enumerable.Empty<RevenueDto>() ;
 
         // Все скидки
         var calcDiscountTask = Task.Run( () =>
@@ -123,6 +121,14 @@ public class RevenueReportService : IRevenueReportService
             Owner = transactions.FirstOrDefault()?.Owner.Id ?? Guid.Empty
         });
 
-        return Task.FromResult ( result );            
+        return result ;            
     }
+
+    /// <summary>
+    /// Реализация ассинхронного варианта
+    /// </summary>
+    /// <param name="transactions"></param>
+    /// <returns></returns>
+    public async Task<IEnumerable<RevenueDto>> CreateAsync(IEnumerable<TransactionModel> transactions, CancellationToken token)
+        => await Task.Run( () => Create( transactions), token);
 }

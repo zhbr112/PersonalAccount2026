@@ -14,5 +14,12 @@ public interface IRevenueReportService : IHandler<RevenueDto>
     /// </summary>
     /// <param name="transactions"></param>
     /// <returns></returns>
-    public Task<IEnumerable<RevenueDto>> Create( IEnumerable<TransactionModel> transactions);
+    public IEnumerable<RevenueDto> Create( IEnumerable<TransactionModel> transactions);
+
+    /// <summary>
+    /// Сформировать отчет ассинхронно
+    /// </summary>
+    /// <param name="transactions"></param>
+    /// <returns></returns>
+    public Task<IEnumerable<RevenueDto>> CreateAsync( IEnumerable<TransactionModel> transactions, CancellationToken token);
 }
