@@ -47,7 +47,7 @@ public class JournalRepository : IClientRepository<JournalRowDto>
             -- Сумма скидки
             discountamount
         from journal
-        where transtype in (387, 386, 211, 216, 101, 102))
+        where transtype in (387, 386, 211, 216, 101, 102)
         and transnumber >= {1}";
 
     /// <summary>
