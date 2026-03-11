@@ -32,7 +32,6 @@ public class RevenueReportService : IRevenueReportService
             return allDiscount;                
         });
      
-
         // Рассчитать все банковские оплаты
         var calcBankTask = Task.Run( () =>
         {
