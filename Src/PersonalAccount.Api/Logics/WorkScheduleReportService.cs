@@ -10,6 +10,9 @@ namespace PersonalAccount.Api.Logics;
 /// </summary>
 public class WorkScheduleReportService : IWorkScheduleReportService
 {
+    // Структура для ключа
+    private record WorkScheduleKey (DateTime Period, EmploeeModel Emploee);
+
     /// <summary>
     /// Сформировать отчет
     /// </summary>
@@ -17,8 +20,81 @@ public class WorkScheduleReportService : IWorkScheduleReportService
     /// <returns></returns>
     public IEnumerable<WorkScheduleDto> Create(IEnumerable<TransactionModel> transactions)
     {
-        throw new NotImplementedException();
+        if(!transactions.Any()) return  Enumerable.Empty<WorkScheduleDto>() ;
+        var companyId = transactions.FirstOrDefault()?.Owner.Id ?? throw new InvalidOperationException("Невозможно получить код корганизации!");
+
+        // Получаем все старты в разрезе каждого дня
+        var starting =  Task.Run( () => 
+                         transactions
+                        .Where(x => x.Type == Domain.Core.TransactionType.StartShift)
+                        .GroupBy(
+                            x => new WorkScheduleKey(x.Period.Date, x.Emploee),
+                            x => x,
+                            (key, group) => new
+                            {
+                                Key = key,
+                                Transactions = group.ToList()
+                            })
+                            .ToDictionary(x => x.Key, x => x.Transactions));
+
+        // Получаем все окончания 
+        var stopping = Task.Run( () => 
+                         transactions
+                        .Where(x => x.Type == Domain.Core.TransactionType.StopShift)
+                        .GroupBy(
+                            x => new WorkScheduleKey(x.Period.Date, x.Emploee),
+                            x => x,
+                            (key, group) => new
+                            {
+                                Key = key,
+                                Transactions = group.ToList()
+                            })
+                            .ToDictionary(x => x.Key, x => x.Transactions));
+
+
+        // Все сотрудники
+        var emploees = Task.Run( () =>
+                     transactions
+                    .Where(x => x.Type == Domain.Core.TransactionType.StartShift || x.Type == Domain.Core.TransactionType.StopShift)
+                    .GroupBy(x => x.Emploee)
+                    .Select(x => x.Key));    
+
+        // Все периоды
+        var periods = Task.Run( () =>             
+                     transactions.Where(x => x.Type == Domain.Core.TransactionType.StartShift || x.Type == Domain.Core.TransactionType.StopShift)
+                    .GroupBy(x => x.Period.Date)
+                    .Select(x => x.Key));    
+
+
+        // Ожидаем расчета
+        Task.WaitAll( starting, stopping, emploees, periods);       
+
+        // Объединяем записи
+        var items = emploees.Result.SelectMany(employee =>
+                        periods.Result.Select(period => new { Employee = employee, Period = period }));
+
+        // Формируем результат
+        var result = items.Select( x => new WorkScheduleDto()
+        {
+            EmploeeId = x.Employee.Id,
+            EmploeeName = x.Employee.Name,
+            Start = starting.Result.TryGetValue(new WorkScheduleKey(x.Period.Date, x.Employee), out var startingKey)
+                   // Берем минимальное значение даты
+                   ? startingKey.Min(t => t.Period).Date
+                   // Или начало дня
+                   : x.Period,
+
+            Stop = stopping.Result.TryGetValue( new WorkScheduleKey(x.Period.Date, x.Employee), out var stoppingKey)
+                    // Берем максимальное значение даты
+                    ? stoppingKey.Max(t => t.Period).Date
+                    // Или окончание дня
+                    : x.Period.AddDays(1).AddSeconds(-1),
+
+            CompanyId = companyId
+        });
+        return result;        
     }
+            
 
     /// <summary>
     /// Реализация ассинхронного варианта
