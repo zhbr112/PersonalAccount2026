@@ -12,9 +12,9 @@ namespace PersonalAccount.UnitTests;
 */
 
 /// <summary>
-/// Набор модульных тестов для проверки работы отчета "Выручка"
+/// Набор модульных тестов для проверки работы отчетов.
 /// </summary>
-public class RevenueReportServiceTests
+public class ReportServiceTests
 {
     /// <summary>
     /// Проверить работу метода Create класс RevenueReportService
@@ -31,11 +31,32 @@ public class RevenueReportServiceTests
 
 
         // Действие
-        var result = service.Create( creator.Transactions );
+        var result = await service.CreateAsync( creator.Transactions, CancellationToken.None );
 
         // Проверка
         Assert.That(result.Any());
         Assert.That(result.First().BankAmount == typicalResult);
         Assert.That(result.First().CashAmount == typicalResult);
+    }
+
+    /// <summary>
+    /// Проверить работу метода Create класс SalesReportService
+    /// </summary>
+    /// <returns></returns>
+    [Test]
+    public async Task Create_SalesReportService_Check()
+    {
+        // Подготовка
+        const double typicalResult = 820.2;
+        var service = new SalesReportService();
+        var creator = new ReportDataCreator();
+        creator.BuildTypicalScenario();
+
+        // Действие
+        var result = await service.CreateAsync( creator.Transactions, CancellationToken.None );
+
+        // Проверка
+        Assert.That(result.Any());
+        Assert.That(result.Sum( x => x.Amount) == typicalResult * 2);
     }
 }
