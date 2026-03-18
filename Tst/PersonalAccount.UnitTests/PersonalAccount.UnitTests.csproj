@@ -19,4 +19,14 @@
     <ProjectReference Include="../../Src/PersonalAccount.Domain/PersonalAccount.Domain.csproj" />
   </ItemGroup>
 
+   <ItemGroup>
+
+    <Content Include="019cff49-54a0-7176-9aa5-46166b549b87.json">
+      <Link>019cff49-54a0-7176-9aa5-46166b549b87.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+
+
 </Project>

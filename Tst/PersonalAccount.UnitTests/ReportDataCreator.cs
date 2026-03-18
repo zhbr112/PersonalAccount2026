@@ -1,9 +1,14 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using PersonalAccount.Domain.Models;
 
 namespace PersonalAccount.UnitTests;
 
 public class ReportDataCreator
 {
+    // Наименование исходного файла
+    private const string sourceTypicalScenario = "019cff49-54a0-7176-9aa5-46166b549b87.json";
+
     /// <summary>
     /// Набор фейковых категорий.
     /// </summary>
@@ -33,7 +38,34 @@ public class ReportDataCreator
     /// <summary>
     /// Сформировать фейковый набор данных для модульного тестирования (простой сценарий)
     /// </summary>
-    public void BuildTypicalScenario()
+     public void BuildTypicalScenario()
+    {
+        if (!File.Exists(sourceTypicalScenario))
+            throw new FileNotFoundException($"Файл данных не найден: {sourceTypicalScenario}");
+
+        var json = File.ReadAllText(sourceTypicalScenario);
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+            Converters = { new JsonStringEnumConverter() }
+        };
+
+        var data = JsonSerializer.Deserialize<ReportDataCreator>(json, options);
+        if (data == null)
+            throw new InvalidOperationException("Не удалось десериализовать данные из JSON.");
+
+        Categories = data.Categories;
+        Companies = data.Companies;
+        Emploees = data.Emploees;
+        Nomenclatures = data.Nomenclatures;
+        Transactions = data.Transactions;
+    }
+
+
+    /// <summary>
+    /// Сформировать фейковый набор данных для модульного тестирования (простой сценарий)
+    /// </summary>
+    public void BuildTypicalScenario1()
     {
         // Организации
         Companies.Add( new CompanyModel()
