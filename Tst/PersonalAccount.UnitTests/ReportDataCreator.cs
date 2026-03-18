@@ -38,7 +38,7 @@ public class ReportDataCreator
     /// <summary>
     /// Сформировать фейковый набор данных для модульного тестирования (простой сценарий)
     /// </summary>
-     public void BuildTypicalScenario()
+     public void BuildTypicalScenarioJson()
     {
         if (!File.Exists(sourceTypicalScenario))
             throw new FileNotFoundException($"Файл данных не найден: {sourceTypicalScenario}");
@@ -65,7 +65,7 @@ public class ReportDataCreator
     /// <summary>
     /// Сформировать фейковый набор данных для модульного тестирования (простой сценарий)
     /// </summary>
-    public void BuildTypicalScenario1()
+    public void BuildTypicalScenarioMannual()
     {
         // Организации
         Companies.Add( new CompanyModel()

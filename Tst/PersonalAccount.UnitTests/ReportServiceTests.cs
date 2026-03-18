@@ -27,7 +27,7 @@ public class ReportServiceTests
         const double typicalResult = 820.2;
         var service = new RevenueReportService();
         var creator = new ReportDataCreator();
-        creator.BuildTypicalScenario();
+        creator.BuildTypicalScenarioMannual();
 
 
         // Действие
@@ -50,7 +50,7 @@ public class ReportServiceTests
         const double typicalResult = 820.2;
         var service = new SalesReportService();
         var creator = new ReportDataCreator();
-        creator.BuildTypicalScenario();
+        creator.BuildTypicalScenarioMannual();
 
         // Действие
         var result = await service.CreateAsync( creator.Transactions, CancellationToken.None );
