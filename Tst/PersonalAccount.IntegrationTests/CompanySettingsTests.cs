@@ -33,7 +33,7 @@ public class CompanySettingsTests
         // Проверки и действие
         Assert.DoesNotThrowAsync( async() =>
         {
-            var result = await repo.Load(company, CancellationToken.None);
+            var result = await repo.LoadAsync(company, CancellationToken.None);
             Assert.That(result is not null);
         });
     }
@@ -60,8 +60,8 @@ public class CompanySettingsTests
         // Действие и проверка
         Assert.DoesNotThrowAsync(async () =>
         {
-            await repo.Save(setting, CancellationToken.None);
-            var result = await repo.Load(company, CancellationToken.None);
+            await repo.SaveAsync(setting, CancellationToken.None);
+            var result = await repo.LoadAsync(company, CancellationToken.None);
 
             Assert.That(result.StartPosition == setting.StartPosition, Is.True);
         });

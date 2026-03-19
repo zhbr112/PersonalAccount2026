@@ -15,7 +15,7 @@ public class CompanySettingsRepository : ICompanySettingsRepository
     /// <param name="company"></param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public async Task<LoadingSettingsModel> Load(CompanyModel company, CancellationToken token)
+    public async Task<LoadingSettingsModel> LoadAsync(CompanyModel company, CancellationToken token)
     {
         var context = new PersonalAccountContext();
         var item = context.Companies.FirstOrDefault(x => x.Id == company.Id)
@@ -34,7 +34,7 @@ public class CompanySettingsRepository : ICompanySettingsRepository
     /// <param name="setting"></param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public async Task Save(LoadingSettingsModel setting, CancellationToken token)
+    public async Task SaveAsync(LoadingSettingsModel setting, CancellationToken token)
     {
         var context = new PersonalAccountContext();
         var companyId = setting.Owner?.Id ?? throw new InvalidDataException("Невозможно сохранить настройки т.к. нет информации об организации!");
