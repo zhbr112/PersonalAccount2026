@@ -8,11 +8,14 @@ namespace PersonalAccount.Api.Logics;
 
 public class LoadingService : ILoadingService
 {
+    private readonly  ICompanySettingsRepository _settingReposity;
+  
+    public LoadingService( ICompanySettingsRepository settingsRepository)
+        => _settingReposity = settingsRepository;
     public bool Push(CompanyModel company, IEnumerable<JournalRowDto> transactions, CancellationToken token)
     {
         // 1 Поучаем настройки
-        var settingsRepo = new CompanySettingsRepository();
-        var settings =  settingsRepo.LoadAsync( company, token ).Result
+        var settings =  _settingReposity.LoadAsync( company, token ).Result
                         ?? new LoadingSettingsModel()
                         {
                             Owner = company, StartPosition = 1, BatchSize = 1000
@@ -29,7 +32,7 @@ public class LoadingService : ILoadingService
         // Обновляем настройки
         var lastCode = innerTransactions.OrderByDescending(x => x.Code).First().Code;
         settings.StartPosition = lastCode;
-        var task = Task.Run( () =>  settingsRepo.SaveAsync( settings , token), token);
+        var task = Task.Run( () =>  _settingReposity.SaveAsync( settings , token), token);
         Task.WaitAll( task );
     
         return true;
