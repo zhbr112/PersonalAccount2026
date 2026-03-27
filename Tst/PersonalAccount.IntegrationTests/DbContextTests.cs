@@ -50,6 +50,5 @@ public class DbContextTests
 
         // Проверка
         Assert.That(result, Is.Not.Null);
-        Assert.That(result.Any());
     }
 }

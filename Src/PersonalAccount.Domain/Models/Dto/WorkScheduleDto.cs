@@ -23,12 +23,12 @@ public class WorkScheduleDto : IDto
     /// <summary>
     /// Начало смены.
     /// </summary>
-    public DateTime Start { get; set; } 
+    public DateTimeOffset Start { get; set; } 
 
     /// <summary>
     /// Окончание смены.
     /// </summary>
-    public DateTime Stop { get; set; }
+    public DateTimeOffset Stop { get; set; }
 
     /// <summary>
     /// Код организации

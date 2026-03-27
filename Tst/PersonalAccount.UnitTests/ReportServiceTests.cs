@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using PersonalAccount.Api.Logics;
 
@@ -27,7 +25,7 @@ public class ReportServiceTests
         const double typicalResult = 820.2;
         var service = new RevenueReportService();
         var creator = new ReportDataCreator();
-        creator.BuildTypicalScenarioMannual();
+        creator.BuildTypicalPaymentScenario(); 
 
 
         // Действие
@@ -50,7 +48,7 @@ public class ReportServiceTests
         const double typicalResult = 820.2;
         var service = new SalesReportService();
         var creator = new ReportDataCreator();
-        creator.BuildTypicalScenarioMannual();
+        creator.BuildTypicalPaymentScenario();
 
         // Действие
         var result = await service.CreateAsync( creator.Transactions, CancellationToken.None );
@@ -58,5 +56,24 @@ public class ReportServiceTests
         // Проверка
         Assert.That(result.Any());
         Assert.That(result.Sum( x => x.Amount) == typicalResult * 2);
+    }
+
+    /// <summary>
+    /// Проверить работу метода Create класс WorkScheduleReportService
+    /// </summary>
+    /// <returns></returns>
+    [Test]
+    public async Task Create_WorkScheduleReportService_Check()
+    {
+        // Подготовка
+        var service = new WorkScheduleReportService();
+        var creator = new ReportDataCreator();
+        creator.BuildTypicalWorkSheduleScenario();
+
+        // Действие
+        var result = await service.CreateAsync( creator.Transactions, CancellationToken.None );
+
+        // Проверка
+        Assert.That(result.Any());
     }
 }

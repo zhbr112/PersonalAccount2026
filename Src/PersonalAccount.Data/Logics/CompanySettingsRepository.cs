@@ -9,6 +9,16 @@ namespace PersonalAccount.Data.Logics;
 /// </summary>
 public class CompanySettingsRepository : ICompanySettingsRepository
 {
+    // Контекст для работы с базой данных
+    private readonly PersonalAccountContext _context;
+
+    /// <summary>
+    /// Создать обхект типа <see cref="CompanySettingsRepository"/>
+    /// </summary>
+    /// <param name="context"> Контекст для работы с базой данных </param>
+    public CompanySettingsRepository(PersonalAccountContext context) => _context = context;
+
+
     /// <summary>
     /// Загрузить настройки
     /// </summary>
@@ -17,8 +27,7 @@ public class CompanySettingsRepository : ICompanySettingsRepository
     /// <returns></returns>
     public async Task<LoadingSettingsModel> LoadAsync(CompanyModel company, CancellationToken token)
     {
-        var context = new PersonalAccountContext();
-        var item = context.Companies.FirstOrDefault(x => x.Id == company.Id)
+        var item = _context.Companies.FirstOrDefault(x => x.Id == company.Id)
             ?? throw new InvalidDataException($"Не найдена организация по коду {company.Id}!");
         var json = !string.IsNullOrEmpty( item.LoadOptions ) ? item.LoadOptions
             :  throw new InvalidDataException($"Организация по коду {company.Id} содержит некорретные данные по настройкам!");
@@ -36,13 +45,12 @@ public class CompanySettingsRepository : ICompanySettingsRepository
     /// <returns></returns>
     public async Task SaveAsync(LoadingSettingsModel setting, CancellationToken token)
     {
-        var context = new PersonalAccountContext();
         var companyId = setting.Owner?.Id ?? throw new InvalidDataException("Невозможно сохранить настройки т.к. нет информации об организации!");
-        var company = context.Companies.FirstOrDefault(x => x.Id == companyId)
+        var company = _context.Companies.FirstOrDefault(x => x.Id == companyId)
             ?? throw new InvalidDataException($"Не найдена организация по коду {companyId}!");
 
         var text =     JsonSerializer.Serialize(setting);
         company.LoadOptions = text;
-        await context.SaveChangesAsync(token);
+        await _context.SaveChangesAsync(token);
    }
 }

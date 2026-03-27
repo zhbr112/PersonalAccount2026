@@ -1,4 +1,5 @@
 using System;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using PersonalAccount.Common.Core;
 using PersonalAccount.Domain.Models;
 using PersonalAccount.Domain.Models.Dto;
@@ -11,7 +12,7 @@ namespace PersonalAccount.Api.Logics;
 public class WorkScheduleReportService : IWorkScheduleReportService
 {
     // Структура для ключа
-    private record WorkScheduleKey (DateTime Period, EmploeeModel Emploee);
+    private record WorkScheduleKey (DateTime Period, Guid EmploeeId);
 
     /// <summary>
     /// Сформировать отчет
@@ -28,7 +29,7 @@ public class WorkScheduleReportService : IWorkScheduleReportService
                          transactions
                         .Where(x => x.Type == Domain.Core.TransactionType.StartShift)
                         .GroupBy(
-                            x => new WorkScheduleKey(x.Period.Date, x.Emploee),
+                            x => new WorkScheduleKey(x.Period.Date, x.Emploee.Id),
                             x => x,
                             (key, group) => new
                             {
@@ -42,7 +43,7 @@ public class WorkScheduleReportService : IWorkScheduleReportService
                          transactions
                         .Where(x => x.Type == Domain.Core.TransactionType.StopShift)
                         .GroupBy(
-                            x => new WorkScheduleKey(x.Period.Date, x.Emploee),
+                            x => new WorkScheduleKey(x.Period.Date, x.Emploee.Id),
                             x => x,
                             (key, group) => new
                             {
@@ -54,17 +55,21 @@ public class WorkScheduleReportService : IWorkScheduleReportService
 
         // Все сотрудники
         var emploees = Task.Run( () =>
-                     transactions
-                    .Where(x => x.Type == Domain.Core.TransactionType.StartShift || x.Type == Domain.Core.TransactionType.StopShift)
-                    .GroupBy(x => x.Emploee)
-                    .Select(x => x.Key));    
+                      transactions
+                     .Where(x => x.Type == Domain.Core.TransactionType.StartShift || 
+                                x.Type == Domain.Core.TransactionType.StopShift)
+                     .Select(x => x.Emploee)
+                     .GroupBy(x => new { x.Id })
+                     .Select(g => g.First())
+                     .ToList());
 
         // Все периоды
         var periods = Task.Run( () =>             
-                     transactions.Where(x => x.Type == Domain.Core.TransactionType.StartShift || x.Type == Domain.Core.TransactionType.StopShift)
-                    .GroupBy(x => x.Period.Date)
-                    .Select(x => x.Key));    
-
+                     transactions
+                    .Where(x => x.Type == Domain.Core.TransactionType.StartShift || 
+                               x.Type == Domain.Core.TransactionType.StopShift)
+                    .Select(x => x.Period)
+                    .Distinct());    
 
         // Ожидаем расчета
         Task.WaitAll( starting, stopping, emploees, periods);       
@@ -78,13 +83,13 @@ public class WorkScheduleReportService : IWorkScheduleReportService
         {
             EmploeeId = x.Employee.Id,
             EmploeeName = x.Employee.Name,
-            Start = starting.Result.TryGetValue(new WorkScheduleKey(x.Period.Date, x.Employee), out var startingKey)
+            Start = starting.Result.TryGetValue(new WorkScheduleKey(x.Period.Date, x.Employee.Id), out var startingKey)
                    // Берем минимальное значение даты
                    ? startingKey.Min(t => t.Period).Date
                    // Или начало дня
                    : x.Period,
 
-            Stop = stopping.Result.TryGetValue( new WorkScheduleKey(x.Period.Date, x.Employee), out var stoppingKey)
+            Stop = stopping.Result.TryGetValue( new WorkScheduleKey(x.Period.Date, x.Employee.Id), out var stoppingKey)
                     // Берем максимальное значение даты
                     ? stoppingKey.Max(t => t.Period).Date
                     // Или окончание дня
@@ -92,7 +97,10 @@ public class WorkScheduleReportService : IWorkScheduleReportService
 
             CompanyId = companyId
         });
-        return result;        
+        
+        return result
+                .GroupBy(x => new { x.CompanyId, x.EmploeeName })
+                .Select(g => g.First());
     }
             
 
