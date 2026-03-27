@@ -75,5 +75,6 @@ public class ReportServiceTests
 
         // Проверка
         Assert.That(result.Any());
+        Assert.That(result.Count() == 2);
     }
 }
