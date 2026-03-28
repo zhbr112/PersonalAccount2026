@@ -29,7 +29,13 @@ public class JournalRowDto : IDto
     /// Уникальный код продукта.
     /// </summary>
     [DataRow("productid")]
-    public long? ProductCode {get;set;}
+    public long? ProductCode { get; set; }
+
+    /// <summary>
+    /// Наименование товара.
+    /// </summary>
+    [DataRow("product_name")]
+    public string ProductName { get; set; } = null!;
 
     /// <summary>
     /// Уникальный код категории продуктов.
@@ -38,10 +44,22 @@ public class JournalRowDto : IDto
     public long? CategoryCode {get;set;}
 
     /// <summary>
+    /// Наименование категории.
+    /// </summary>
+    [DataRow("category_name")]
+    public string CategoryName { get; set; } = null!;
+
+    /// <summary>
     /// Код сотрудника.
     /// </summary>
     [DataRow("emploeeid")]
-    public long? EmploeeCode {get;set;}
+    public long? EmploeeCode { get; set; }
+
+    /// <summary>
+    /// Наименование сотрудника
+    /// </summary>
+    [DataRow("emploee_name")]
+    public string EmploeeName { get; set; } = null!;
 
     /// <summary>
     /// Дата время транзакции.
