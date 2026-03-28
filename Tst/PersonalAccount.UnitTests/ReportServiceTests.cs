@@ -1,5 +1,10 @@
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using PersonalAccount.Api.Logics;
+using PersonalAccount.Api.Extensions;
+using PersonalAccount.Common.Core;
+using PersonalAccount.Console.Extensions;
+using PersonalAccount.Data.Extensions;
 
 namespace PersonalAccount.UnitTests;
 
@@ -14,6 +19,24 @@ namespace PersonalAccount.UnitTests;
 /// </summary>
 public class ReportServiceTests
 {
+    // Работа с контейнером
+    private IServiceProvider _provider;
+
+    public ReportServiceTests()
+    {
+       var builder = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json");
+
+        var configuration = builder.Build();
+        var services = new ServiceCollection()
+                     .RegistryPersonalAccountData( configuration )
+                     .RegistryPersonalAccountApi( configuration )
+                     .RegistryPersonalAccountConsole( configuration);
+
+        _provider = services.BuildServiceProvider();
+    }
+
     /// <summary>
     /// Проверить работу метода Create класс RevenueReportService
     /// </summary>
@@ -23,7 +46,7 @@ public class ReportServiceTests
     {
         // Подготовка
         const double typicalResult = 820.2;
-        var service = new RevenueReportService();
+        var service = _provider.GetRequiredService<IRevenueReportService>();
         var creator = new ReportDataCreator();
         creator.BuildTypicalPaymentScenario(); 
 
@@ -46,7 +69,7 @@ public class ReportServiceTests
     {
         // Подготовка
         const double typicalResult = 820.2;
-        var service = new SalesReportService();
+        var service = _provider.GetRequiredService<ISalesReportService>();
         var creator = new ReportDataCreator();
         creator.BuildTypicalPaymentScenario();
 
@@ -66,7 +89,7 @@ public class ReportServiceTests
     public async Task Create_WorkScheduleReportService_Check()
     {
         // Подготовка
-        var service = new WorkScheduleReportService();
+        var service = _provider.GetRequiredService<IWorkScheduleReportService>();
         var creator = new ReportDataCreator();
         creator.BuildTypicalWorkSheduleScenario();
 

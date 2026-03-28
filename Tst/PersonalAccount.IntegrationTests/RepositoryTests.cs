@@ -1,9 +1,12 @@
 using System;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
+using PersonalAccount.Common.Models;
+using PersonalAccount.Console.Extensions;
 using PersonalAccount.Console.Logics;
-using PersonalAccount.Console.Models;
+using PersonalAccount.Data.Extensions;
 
 namespace PersonalAccount.IntegrationTests;
 
@@ -19,18 +22,21 @@ namespace PersonalAccount.IntegrationTests;
 /// </summary>
 public class RepositoryTests
 {
-    // Настройки текущие
-    private ApplicationOptions _options;
+     // Работа с контейнером
+    private IServiceProvider _provider;
 
     public RepositoryTests()
     {
-        var builder = new ConfigurationBuilder()
+       var builder = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile("appsettings.json");
 
         var configuration = builder.Build();
-        _options = configuration.Get<ApplicationOptions>()
-                        ?? throw new InvalidOperationException("Unabled loading appsettings.json!");
+        var services = new ServiceCollection()
+                     .RegistryPersonalAccountData( configuration )
+                     .RegistryPersonalAccountConsole( configuration);
+
+        _provider = services.BuildServiceProvider();
     }
 
     /// <summary>
@@ -45,7 +51,8 @@ public class RepositoryTests
     public async Task GetRows_JournalRepository_Fetch(int rows)
     {
         // Подготовка
-        using var connect = new SqlConnection(_options.ConnectionString);
+        var options = _provider.GetRequiredService<ConsoleOptions>();
+        using var connect = new SqlConnection(options.ConnectionString);
         var repo = new JournalRepository();
 
         // Действие

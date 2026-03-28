@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PersonalAccount.Common.Core;
+using PersonalAccount.Common.Models;
 using PersonalAccount.Data.Logics;
 
 namespace PersonalAccount.Data.Extensions;
@@ -24,12 +25,14 @@ public static class RegistryExtension
         IConfiguration configuration
     )
     {
-        services.AddSingleton< ICompanySettingsRepository, CompanySettingsRepository>();
+        var options = configuration.GetSection(nameof(ApiOptions)).Get<ApiOptions>()
+                        ?? throw new InvalidOperationException($"Невозможно загрузить настройки из секции {nameof(ApiOptions)}!");
 
-        var connectionString = "User ID=admin;Password=123456;Host=localhost;Port=5433;Database=personal_account;";
+        services.AddSingleton< ICompanySettingsRepository, CompanySettingsRepository>();
         services.AddDbContext<PersonalAccountContext>(
-            x => x.UseNpgsql( connectionString )
+            x => x.UseNpgsql( options.ConnectionString )
         );
+        services.AddSingleton( x => options );
 
         return services;
     }
