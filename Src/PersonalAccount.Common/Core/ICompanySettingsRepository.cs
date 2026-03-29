@@ -1,4 +1,3 @@
-using System;
 using PersonalAccount.Domain.Models;
 
 namespace PersonalAccount.Common.Core;
@@ -8,6 +7,19 @@ namespace PersonalAccount.Common.Core;
 /// </summary>
 public interface ICompanySettingsRepository
 {
+    /// <summary>
+    /// Сохранить настройки
+    /// </summary>
+    /// <param name="setting"></param>
+    public void Save(LoadingSettingsModel setting);
+
+    /// <summary>
+    /// Загрузить настройки.
+    /// </summary>
+    /// <param name="company"></param>
+    /// <returns></returns>
+    public LoadingSettingsModel Load(CompanyModel company);
+
     /// <summary>
     /// Сохранить настройки
     /// </summary>

@@ -18,14 +18,12 @@ public class CompanySettingsRepository : ICompanySettingsRepository
     /// <param name="context"> Контекст для работы с базой данных </param>
     public CompanySettingsRepository(PersonalAccountContext context) => _context = context;
 
-
     /// <summary>
     /// Загрузить настройки
     /// </summary>
-    /// <param name="company"></param>
-    /// <param name="token"></param>
+    /// <param name="company"> Организация. </param>
     /// <returns></returns>
-    public async Task<LoadingSettingsModel> LoadAsync(CompanyModel company, CancellationToken token)
+    public LoadingSettingsModel Load(CompanyModel company)
     {
         var item = _context.Companies.FirstOrDefault(x => x.Id == company.Id)
             ?? throw new InvalidDataException($"Не найдена организация по коду {company.Id}!");
@@ -37,13 +35,30 @@ public class CompanySettingsRepository : ICompanySettingsRepository
         return result;
     }
 
+
+    /// <summary>
+    /// Загрузить настройки
+    /// </summary>
+    /// <param name="company"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    public async Task<LoadingSettingsModel> LoadAsync(CompanyModel company, CancellationToken token)
+        => await Task.Run( () => Load( company ), token);
+
+    /// <summary>
+    /// Сохранить настройки
+    /// </summary>
+    /// <param name="setting"> Настройки </param>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    public async Task SaveAsync(LoadingSettingsModel setting, CancellationToken token)
+        => await Task.Run( () => Save(setting), token);
+
     /// <summary>
     /// Сохранить настройки
     /// </summary>
     /// <param name="setting"></param>
-    /// <param name="token"></param>
-    /// <returns></returns>
-    public async Task SaveAsync(LoadingSettingsModel setting, CancellationToken token)
+    public void Save(LoadingSettingsModel setting)
     {
         var companyId = setting.Owner?.Id ?? throw new InvalidDataException("Невозможно сохранить настройки т.к. нет информации об организации!");
         var company = _context.Companies.FirstOrDefault(x => x.Id == companyId)
@@ -51,6 +66,6 @@ public class CompanySettingsRepository : ICompanySettingsRepository
 
         var text =     JsonSerializer.Serialize(setting);
         company.LoadOptions = text;
-        await _context.SaveChangesAsync(token);
-   }
+        _context.SaveChanges();
+    }
 }
