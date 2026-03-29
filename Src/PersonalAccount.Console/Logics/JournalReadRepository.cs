@@ -1,4 +1,3 @@
-using System;
 using System.Data;
 using System.Data.Common;
 using Microsoft.Data.SqlClient;
@@ -10,9 +9,9 @@ using PersonalAccount.Domain.Models.Dto;
 namespace PersonalAccount.Console.Logics;
 
 /// <summary>
-/// Реализация интерфейса <see cref="IRepository"/>
+/// Реализация интерфейса <see cref="IClientRepository<T>"/>
 /// </summary>
-public class JournalRepository : IClientRepository<JournalRowDto>
+public class JournalReadRepository : IClientRepository<JournalRowDto>
 {
     // Шаблон SQL запроса
     private const string _sql = @"
@@ -58,7 +57,7 @@ public class JournalRepository : IClientRepository<JournalRowDto>
     /// <returns></returns>
     public async Task<IEnumerable<JournalRowDto>> GetRows(DbConnection connection, LoadingSettingsModel options)
     {
-         // Проверки
+        // Проверки
         ArgumentNullException.ThrowIfNull(connection);
         var sql = string.Format(_sql, options.BatchSize, options.StartPosition);    
 

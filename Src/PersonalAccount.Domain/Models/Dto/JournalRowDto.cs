@@ -8,6 +8,12 @@ namespace PersonalAccount.Domain.Models.Dto;
 public class JournalRowDto : IDto
 {
     /// <summary>
+    /// Уникальный код организации
+    /// </summary>
+    [DataRow("company_id")]
+    public long CompanyId {get; set;}
+
+    /// <summary>
     /// Уникальный код транзакции.
     /// </summary>
     [DataRow("transnumber")]
@@ -35,7 +41,7 @@ public class JournalRowDto : IDto
     /// Наименование товара.
     /// </summary>
     [DataRow("product_name")]
-    public string ProductName { get; set; } = null!;
+    public string? ProductName { get; set; } 
 
     /// <summary>
     /// Уникальный код категории продуктов.
@@ -47,7 +53,7 @@ public class JournalRowDto : IDto
     /// Наименование категории.
     /// </summary>
     [DataRow("category_name")]
-    public string CategoryName { get; set; } = null!;
+    public string? CategoryName { get; set; } 
 
     /// <summary>
     /// Код сотрудника.
@@ -59,31 +65,31 @@ public class JournalRowDto : IDto
     /// Наименование сотрудника
     /// </summary>
     [DataRow("emploee_name")]
-    public string EmploeeName { get; set; } = null!;
+    public string? EmploeeName { get; set; }
 
     /// <summary>
     /// Дата время транзакции.
     /// </summary>
     [DataRow("dater")]
-    public DateTime Period {get;set;}
+    public DateTime Period { get; set; }
 
     /// <summary>
     /// Количество.
     /// </summary>
     [DataRow("quantity")]
-    public double Quantity {get;set;}
+    public double Quantity { get; set; }
 
     /// <summary>
     /// Цена.
     /// </summary>
     [DataRow("price")]
-    public double Price {get;set;}
+    public double Price { get; set; }
 
     /// <summary>
     /// Сумма скидки.
     /// </summary>
     [DataRow("discountamount")]
-    public double Discount {get;set;}
+    public double Discount { get; set; }
 
     public override string ToString()
         => $"{Period}:Транзакция - {Quantity * Price}";

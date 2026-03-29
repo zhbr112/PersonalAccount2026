@@ -27,7 +27,7 @@ public static class RegistryExtension
         var options = configuration.GetSection(nameof(ConsoleOptions)).Get<ConsoleOptions>()
                         ?? throw new InvalidOperationException($"Невозможно загрузить настройки из секции {nameof(ConsoleOptions)}!");
 
-        services.AddScoped<  IClientRepository<JournalRowDto> , JournalRepository >();
+        services.AddScoped<  IClientRepository<JournalRowDto> , JournalReadRepository >();
         services.AddSingleton( x => options );
         return services;
     }

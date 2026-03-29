@@ -2,6 +2,8 @@
 -- 2026-03-27
 create table if not exists journal
 (
+    -- Уникальный код организации
+    company_id uuid not null,
     -- Уникальный код транзакции.
     transnumber bigint,
     -- Уникальный код типа транзакции.
@@ -30,3 +32,7 @@ create table if not exists journal
     discountamount float
 );
 
+-- Дополнительный индексы для перегрузки данных
+create index ix_journal_combo on journal(transnumber, company_id);
+create index ix_journal_company_id on journal(company_id);
+create index ix_journal_transnumber on journal(transnumber);

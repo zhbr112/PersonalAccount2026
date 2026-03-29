@@ -1,8 +1,8 @@
-using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PersonalAccount.Api.Logics;
 using PersonalAccount.Common.Core;
+using PersonalAccount.Domain.Models.Dto;
 
 namespace PersonalAccount.Api.Extensions;
 
@@ -26,6 +26,7 @@ public static class RegistryExtension
         services.AddScoped< IRevenueReportService, RevenueReportService>();
         services.AddScoped< ISalesReportService, SalesReportService>();
         services.AddScoped< IWorkScheduleReportService, WorkScheduleReportService>();
+        services.AddScoped< IServerRepository<JournalRowDto> , JournalWriteRepository >();
         return services;
     }
 }
