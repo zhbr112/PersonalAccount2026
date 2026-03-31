@@ -64,6 +64,7 @@ public partial class PersonalAccountContext : DbContext
                 .HasColumnName("id");
             entity.Property(e => e.Address).HasColumnName("address");
             entity.Property(e => e.Inn).HasColumnName("inn");
+            entity.Property(e => e.Name).HasColumnName("name");
             entity.Property(e => e.LoadOptions)
                 .HasColumnType("jsonb")
                 .HasColumnName("load_options");

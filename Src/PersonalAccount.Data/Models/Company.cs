@@ -9,6 +9,8 @@ public partial class Company
 
     public string? Inn { get; set; }
 
+    public string? Name { get; set; }
+
     public string? Address { get; set; }
 
     public string? LoadOptions { get; set; }

@@ -19,7 +19,7 @@ public class LoadingService : ILoadingService
 
     // Контекст для работы с базой данных
     private readonly PersonalAccountContext _context;
-  
+    
     public LoadingService( 
             PersonalAccountContext context,
             ICompanySettingsRepository settingsRepository, 
@@ -32,7 +32,7 @@ public class LoadingService : ILoadingService
        
        
     /// <InhericDoc/>
-    public bool Push(CompanyModel company, IEnumerable<JournalRowDto> transactions, CancellationToken token)
+    private bool Push(CompanyModel company, IEnumerable<JournalRowDto> transactions)
     {
         // 1 Получаем настройки
         var settings = _settingReposity.Load( company) 
@@ -60,6 +60,53 @@ public class LoadingService : ILoadingService
     }
 
     /// <InhericDoc/>
-    public async Task<bool> PushAsync(CompanyModel company, IEnumerable<JournalRowDto> transactions, CancellationToken token)
-        => await Task.Run( () => Push( company, transactions, token), token);
+    public bool Push(Guid companyId, IEnumerable<JournalRowDto> transactions)
+    {
+        var company = _context.Companies.FirstOrDefault( x => x.Id == companyId) ?? throw new InvalidOperationException($"Невозможно получить карточку организации по коду {companyId}!");
+        return Push(new CompanyModel() { Id = companyId}, transactions);
+    }
+
+    /// <InhericDoc/>
+    public async Task<bool> PushAsync(Guid companyId, IEnumerable<JournalRowDto> transactions, CancellationToken token)
+        => await Task.Run( () => Push( companyId, transactions), token);
+
+    /// <InhericDoc/>
+    public LoadingSettingsModel GetSettings(Guid companyId)
+    {
+        var company = _context.Companies.FirstOrDefault( x => x.Id == companyId ) ?? throw new InvalidOperationException($"Невозможно получить карточку организации по коду {companyId}!");
+        
+        // Конвертируем в модель
+        var companyModel = new CompanyModel()
+        { 
+            Id = companyId, 
+            Name = company.Name ?? string.Empty,  
+            Address = company.Address ?? string.Empty,
+            INN = company.Inn ?? string.Empty
+        };
+
+        var settings = _settingReposity.Load( companyModel ) ;
+
+         // Сформируем новый набор настроек и сохраним их.
+        if (settings is null)
+        {
+           
+            settings = new LoadingSettingsModel()
+                        {
+                            Owner = companyModel, StartPosition = 1, BatchSize = 1000
+                        };
+            _settingReposity.Save( settings );            
+        }
+        else
+        {
+            // Обновим настройки
+            settings.Owner = companyModel;
+            _settingReposity.Save( settings );        
+        }
+
+        return settings;
+    }
+
+    /// <InhericDoc/>
+    public async Task<LoadingSettingsModel> GetSettingsAsync(Guid companyId, CancellationToken token)
+        => await Task.Run( () => GetSettings(companyId), token);
 }
