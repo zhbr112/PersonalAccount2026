@@ -47,7 +47,8 @@ public class JournalReadRepository : IClientRepository<JournalRowDto>
             discountamount
         from journal
         where transtype in (387, 386, 211, 216, 101, 102)
-        and transnumber >= {1}";
+        and transnumber > {1}
+        order by transnumber";
 
     /// <summary>
     /// Получить выборку данных из журнала транзакций.

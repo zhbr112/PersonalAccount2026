@@ -5,10 +5,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PersonalAccount.Api.Extensions;
+using PersonalAccount.Common.Models;
 using PersonalAccount.Data.Extensions;
 
-
-var connectionString = "User ID=admin;Password=123456;Host=localhost;Port=5433;Database=personal_account;";
 
 // Настройки и построитель Web приложения
 var builder = WebApplication.CreateBuilder();
@@ -16,9 +15,12 @@ var configuration = new ConfigurationBuilder()
                     .AddJsonFile("appsettings.json")
                     .Build();
 
+var options = configuration.GetSection(nameof(ApiOptions)).Get<ApiOptions>()
+                        ?? throw new InvalidOperationException($"Невозможно загрузить настройки из секции {nameof(ApiOptions)}!");
+                 
 // Миграции
 var upgrader =  DeployChanges.To
-            .PostgresqlDatabase(  connectionString )
+            .PostgresqlDatabase(  options.ConnectionString )
             .WithScriptsEmbeddedInAssembly(Assembly.GetAssembly(typeof(PersonalAccount.Data.PersonalAccountDataMarker)))
             .LogToConsole()
             .Build();

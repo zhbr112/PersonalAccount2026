@@ -11,4 +11,14 @@ public class ConsoleOptions
     /// Строка подключения к MSSQL
     /// </summary>
     public string ConnectionString { get; set; } = null!;
+
+    /// <summary>
+    /// Хост для подключения к серверу
+    /// </summary>
+    public string ServerHost { get; set; } = null!;
+
+    /// <summary>
+    /// Уникальный код организации
+    /// </summary>
+    public Guid CompanyId { get; set; }
 }

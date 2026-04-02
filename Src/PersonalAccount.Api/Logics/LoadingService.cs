@@ -49,13 +49,14 @@ public class LoadingService : ILoadingService
 
         // Сохраняем 
         var connect = _context.Database.GetDbConnection();
-        var writeTask = _writerRepository.SaveRows(connect, innerTransactions, settings );
+        var task = _writerRepository.SaveRows(connect, innerTransactions, settings );
         
         // Обновляем настройки
         var lastCode = innerTransactions.OrderByDescending(x => x.Code).First().Code;
         settings.StartPosition = lastCode;
         _settingReposity.Save( settings );
-    
+
+        Task.WaitAll( task );
         return true;
     }
 
@@ -95,12 +96,6 @@ public class LoadingService : ILoadingService
                             Owner = companyModel, StartPosition = 1, BatchSize = 1000
                         };
             _settingReposity.Save( settings );            
-        }
-        else
-        {
-            // Обновим настройки
-            settings.Owner = companyModel;
-            _settingReposity.Save( settings );        
         }
 
         return settings;
