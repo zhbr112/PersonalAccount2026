@@ -21,48 +21,49 @@ namespace PersonalAccount.Api.Controllers
         /// <summary>
         /// Выполнить загрузку данных в raw таблицу из журнала.
         /// </summary>
-        /// <param name="companyId"> Уникальный код организации </param>
+        /// <param name="branchId"> Уникальный код филиала </param>
         /// <param name="transactions"> Список транзакций </param>
         /// <returns></returns>
-        [HttpPost("{companyId}")]
+        [HttpPost("branch/{branchId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Push(
+        public async Task<ActionResult> PushToBranch(
             [FromRoute]
-            Guid companyId, 
+            Guid branchId,
             [FromBody]
             IEnumerable<JournalRowDto> transactions,
             CancellationToken token
         )
         {
-            var result = await _loadingService.PushAsync( companyId, transactions, token);
+            var result = await _loadingService.PushAsync(branchId, transactions, token);
             if(result) return Ok();
             else
                 return BadRequest();
-        } 
+        }
 
         // Пример запроса.
         // http://0.0.0.0:8000/console/14e54725-0efc-42b8-a27d-a84f9a7257c5
 
         /// <summary>
-        /// Получить текущие настройки дяя указанной организации
+        /// Получить текущие настройки филиала
         /// </summary>
-        /// <param name="companyId"> Уникальный код организации </param>
+        /// <param name="branchId"> Уникальный код филиала </param>
         /// <param name="token"></param>
         /// <returns></returns>
-        [HttpGet("{companyId}")]
+        [HttpGet("branch/{branchId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(LoadingSettingsModel))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> GetSettings(
+        public async Task<ActionResult> GetBranchSettings(
             [FromRoute]
-            Guid companyId,
+            Guid branchId,
              CancellationToken token
         )
         {
-            var result = await _loadingService.GetSettingsAsync(companyId, token);
+            var result = await _loadingService.GetSettingsAsync(branchId, token);
             if(result is not null) return Ok(result);
             else
                 return BadRequest();
         }
+
     }
 }

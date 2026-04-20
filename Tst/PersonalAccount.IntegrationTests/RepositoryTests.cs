@@ -81,6 +81,8 @@ public class RepositoryTests
         var repo = _provider.GetRequiredService<IServerRepository<JournalRowDto>>();
         var context = _provider.GetRequiredService<PersonalAccountContext>();
         var connect = context.Database.GetDbConnection();
+        var companyId = new Guid("14e54725-0efc-42b8-a27d-a84f9a7257c5");
+        var branch = context.Branches.First(x => x.CompanyId == companyId);
         var transactions = new List<JournalRowDto>()
         {
             new JournalRowDto()
@@ -105,10 +107,12 @@ public class RepositoryTests
         {
             StartPosition = 1,
             BatchSize = 100,
-            Owner = new CompanyModel()
+            Branch = new BranchModel()
             {
-                Id = new Guid("14e54725-0efc-42b8-a27d-a84f9a7257c5")
-            }
+                Id = branch.Id,
+                Name = branch.Name,
+                Company = new CompanyModel() { Id = companyId }
+            },
         };
 
         // Действие и проверка

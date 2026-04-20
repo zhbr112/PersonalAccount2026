@@ -21,17 +21,25 @@ public class CompanySettingsRepository : ICompanySettingsRepository
     /// <summary>
     /// Загрузить настройки
     /// </summary>
-    /// <param name="company"> Организация. </param>
+    /// <param name="branchId"> Уникальный код филиала. </param>
     /// <returns></returns>
-    public LoadingSettingsModel Load(CompanyModel company)
+    public LoadingSettingsModel Load(Guid branchId)
     {
-        var item = _context.Companies.FirstOrDefault(x => x.Id == company.Id)
-            ?? throw new InvalidDataException($"Не найдена организация по коду {company.Id}!");
-        var json = !string.IsNullOrEmpty( item.LoadOptions ) ? item.LoadOptions
-            :  throw new InvalidDataException($"Организация по коду {company.Id} содержит некорретные данные по настройкам!");
+        var item = _context.Branches
+            .Where(x => x.Id == branchId)
+            .Join(
+                _context.Companies,
+                branch => branch.CompanyId,
+                company => company.Id,
+                (branch, company) => new { Branch = branch, Company = company })
+            .FirstOrDefault()
+            ?? throw new InvalidDataException($"Не найден филиал по коду {branchId}!");
+
+        var json = !string.IsNullOrEmpty(item.Branch.LoadOptions) ? item.Branch.LoadOptions
+            : throw new InvalidDataException($"Филиал по коду {branchId} содержит некорретные данные по настройкам!");
 
         var result = JsonSerializer.Deserialize< LoadingSettingsModel >(json)
-            ?? throw new InvalidDataException($"Организация по коду {company.Id} содержит некорретные данные по настройкам!");
+            ?? throw new InvalidDataException($"Филиал по коду {branchId} содержит некорретные данные по настройкам!");
         return result;
     }
 
@@ -39,11 +47,11 @@ public class CompanySettingsRepository : ICompanySettingsRepository
     /// <summary>
     /// Загрузить настройки
     /// </summary>
-    /// <param name="company"></param>
+    /// <param name="branchId"></param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public async Task<LoadingSettingsModel> LoadAsync(CompanyModel company, CancellationToken token)
-        => await Task.Run( () => Load( company ), token);
+    public async Task<LoadingSettingsModel> LoadAsync(Guid branchId, CancellationToken token)
+        => await Task.Run(() => Load(branchId), token);
 
     /// <summary>
     /// Сохранить настройки
@@ -60,12 +68,12 @@ public class CompanySettingsRepository : ICompanySettingsRepository
     /// <param name="setting"></param>
     public void Save(LoadingSettingsModel setting)
     {
-        var companyId = setting.Owner?.Id ?? throw new InvalidDataException("Невозможно сохранить настройки т.к. нет информации об организации!");
-        var company = _context.Companies.FirstOrDefault(x => x.Id == companyId)
-            ?? throw new InvalidDataException($"Не найдена организация по коду {companyId}!");
+        var branchId = setting.Branch?.Id ?? throw new InvalidDataException("Невозможно сохранить настройки т.к. нет информации о филиале!");
+        var branch = _context.Branches.FirstOrDefault(x => x.Id == branchId)
+            ?? throw new InvalidDataException($"Не найден филиал по коду {branchId}!");
 
-        var text =     JsonSerializer.Serialize(setting);
-        company.LoadOptions = text;
+        var text = JsonSerializer.Serialize(setting);
+        branch.LoadOptions = text;
         _context.SaveChanges();
     }
 }

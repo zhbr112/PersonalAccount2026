@@ -29,16 +29,16 @@ public class LoadingService : ILoadingService
         _settingReposity = settingsRepository;
         _writerRepository = writerRepository;
     }        
-       
-       
+
+    
     /// <InhericDoc/>
-    private bool Push(CompanyModel company, IEnumerable<JournalRowDto> transactions)
+    private bool Push(BranchModel branch, IEnumerable<JournalRowDto> transactions)
     {
         // 1 Получаем настройки
-        var settings = _settingReposity.Load( company) 
+        var settings = _settingReposity.Load(branch.Id)
                         ?? new LoadingSettingsModel()
                         {
-                            Owner = company, StartPosition = 1, BatchSize = 1000
+                            Branch = branch, StartPosition = 1, BatchSize = 1000
                         };
 
         var firstTransaction = transactions.FirstOrDefault();
@@ -61,31 +61,57 @@ public class LoadingService : ILoadingService
     }
 
     /// <InhericDoc/>
-    public bool Push(Guid companyId, IEnumerable<JournalRowDto> transactions)
+    public bool Push(Guid branchId, IEnumerable<JournalRowDto> transactions)
     {
-        var company = _context.Companies.FirstOrDefault( x => x.Id == companyId) ?? throw new InvalidOperationException($"Невозможно получить карточку организации по коду {companyId}!");
-        return Push(new CompanyModel() { Id = companyId}, transactions);
+        var branch = _context.Branches
+            .Include(x => x.Company)
+            .FirstOrDefault(x => x.Id == branchId)
+            ?? throw new InvalidOperationException($"Невозможно получить карточку филиала по коду {branchId}!");
+        return Push(
+            new BranchModel()
+            {
+                Id = branchId,
+                Company = new CompanyModel()
+                {
+                    Id = branch.CompanyId,
+                    Name = branch.Company.Name ?? string.Empty,
+                    Address = branch.Company.Address ?? string.Empty,
+                    INN = branch.Company.Inn ?? string.Empty
+                },
+                Name = branch.Name
+            },
+            transactions);
     }
 
     /// <InhericDoc/>
-    public async Task<bool> PushAsync(Guid companyId, IEnumerable<JournalRowDto> transactions, CancellationToken token)
-        => await Task.Run( () => Push( companyId, transactions), token);
+    public async Task<bool> PushAsync(Guid branchId, IEnumerable<JournalRowDto> transactions, CancellationToken token)
+        => await Task.Run(() => Push(branchId, transactions), token);
 
     /// <InhericDoc/>
-    public LoadingSettingsModel GetSettings(Guid companyId)
+    public LoadingSettingsModel GetSettings(Guid branchId)
     {
-        var company = _context.Companies.FirstOrDefault( x => x.Id == companyId ) ?? throw new InvalidOperationException($"Невозможно получить карточку организации по коду {companyId}!");
+        var branch = _context.Branches
+            .Include(x => x.Company)
+            .FirstOrDefault(x => x.Id == branchId)
+            ?? throw new InvalidOperationException($"Невозможно получить карточку филиала по коду {branchId}!");
         
         // Конвертируем в модель
         var companyModel = new CompanyModel()
         { 
-            Id = companyId, 
-            Name = company.Name ?? string.Empty,  
-            Address = company.Address ?? string.Empty,
-            INN = company.Inn ?? string.Empty
+            Id = branch.CompanyId,
+            Name = branch.Company.Name ?? string.Empty,
+            Address = branch.Company.Address ?? string.Empty,
+            INN = branch.Company.Inn ?? string.Empty
         };
 
-        var settings = _settingReposity.Load( companyModel ) ;
+        var branchModel = new BranchModel()
+        {
+            Id = branchId,
+            Name = branch.Name,
+            Company = companyModel
+        };
+
+        var settings = _settingReposity.Load(branchId);
 
          // Сформируем новый набор настроек и сохраним их.
         if (settings is null)
@@ -93,7 +119,7 @@ public class LoadingService : ILoadingService
            
             settings = new LoadingSettingsModel()
                         {
-                            Owner = companyModel, StartPosition = 1, BatchSize = 1000
+                            Branch = branchModel, StartPosition = 1, BatchSize = 1000
                         };
             _settingReposity.Save( settings );            
         }
@@ -102,6 +128,7 @@ public class LoadingService : ILoadingService
     }
 
     /// <InhericDoc/>
-    public async Task<LoadingSettingsModel> GetSettingsAsync(Guid companyId, CancellationToken token)
-        => await Task.Run( () => GetSettings(companyId), token);
+    public async Task<LoadingSettingsModel> GetSettingsAsync(Guid branchId, CancellationToken token)
+        => await Task.Run(() => GetSettings(branchId), token);
+
 }

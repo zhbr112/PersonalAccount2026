@@ -21,4 +21,9 @@ public class ConsoleOptions
     /// Уникальный код организации
     /// </summary>
     public Guid CompanyId { get; set; }
+
+    /// <summary>
+    /// Уникальный код филиала
+    /// </summary>
+    public Guid BranchId { get; set; }
 }

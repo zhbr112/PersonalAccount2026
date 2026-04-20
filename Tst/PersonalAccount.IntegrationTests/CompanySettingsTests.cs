@@ -5,6 +5,7 @@ using NUnit.Framework;
 using PersonalAccount.Common.Core;
 using PersonalAccount.Data.Extensions;
 using PersonalAccount.Data.Logics;
+using PersonalAccount.Data;
 using PersonalAccount.Domain.Models;
 
 namespace PersonalAccount.IntegrationTests;
@@ -48,15 +49,17 @@ public class CompanySettingsTests
     {
         // Подготова
         var repo = _provider.GetRequiredService<ICompanySettingsRepository>();
+        var context = _provider.GetRequiredService<PersonalAccountContext>();
         var company = new CompanyModel()
         {
             Id = new Guid( companyId )
         };
+        var branchId = context.Branches.Where(x => x.CompanyId == company.Id).Select(x => x.Id).First();
 
         // Проверки и действие
         Assert.DoesNotThrowAsync( async() =>
         {
-            var result = await repo.LoadAsync(company, CancellationToken.None);
+            var result = await repo.LoadAsync(branchId, CancellationToken.None);
             Assert.That(result is not null);
         });
     }
@@ -72,20 +75,24 @@ public class CompanySettingsTests
     {
         // Подготовка
         var repo = _provider.GetRequiredService<ICompanySettingsRepository>();
+        var context = _provider.GetRequiredService<PersonalAccountContext>();
         var company = new CompanyModel()
         {
             Id = new Guid( companyId )
         };
+        var branch = context.Branches.First(x => x.CompanyId == company.Id);
         var setting = new LoadingSettingsModel()
         {
-            Owner = company, BatchSize = 10, StartPosition = 0
+            Branch = new BranchModel() { Id = branch.Id, Name = branch.Name, Company = company },
+            BatchSize = 10,
+            StartPosition = 0
         };
 
         // Действие и проверка
         Assert.DoesNotThrowAsync(async () =>
         {
             await repo.SaveAsync(setting, CancellationToken.None);
-            var result = await repo.LoadAsync(company, CancellationToken.None);
+            var result = await repo.LoadAsync(branch.Id, CancellationToken.None);
 
             Assert.That(result.StartPosition == setting.StartPosition, Is.True);
         });

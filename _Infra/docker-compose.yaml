@@ -23,6 +23,7 @@ services:
     environment:
       POSTGRES_PASSWORD: ${POSTGRESQL_PASS}
       POSTGRES_USER: ${POSTGRESQL_USER}
+      POSTGRES_DB: personal_account
       PGDATA: "/var/lib/postgresql/data/pgdata"
     volumes:
       - ./pgdata:/var/lib/postgresql/data

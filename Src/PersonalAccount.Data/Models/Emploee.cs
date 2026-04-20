@@ -11,9 +11,9 @@ public partial class Emploee
 
     public string? Phone { get; set; }
 
-    public Guid? CompanyId { get; set; }
+    public Guid? BranchId { get; set; }
 
-    public virtual Company? Company { get; set; }
+    public virtual Branch? Branch { get; set; }
 
     public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 }
