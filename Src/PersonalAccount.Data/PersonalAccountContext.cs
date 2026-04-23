@@ -18,6 +18,8 @@ public partial class PersonalAccountContext : DbContext
 
     public virtual DbSet<Category> Categories { get; set; }
 
+    public virtual DbSet<Branch> Branches { get; set; }
+
     public virtual DbSet<Company> Companies { get; set; }
 
     public virtual DbSet<Emploee> Emploees { get; set; }
@@ -43,12 +45,34 @@ public partial class PersonalAccountContext : DbContext
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("gen_random_uuid()")
                 .HasColumnName("id");
-            entity.Property(e => e.CompanyId).HasColumnName("company_id");
+            entity.Property(e => e.BranchId).HasColumnName("branch_id");
             entity.Property(e => e.Name).HasColumnName("name");
 
-            entity.HasOne(d => d.Company).WithMany(p => p.Categories)
+            entity.HasOne(d => d.Branch).WithMany(p => p.Categories)
+                .HasForeignKey(d => d.BranchId)
+                .HasConstraintName("categories_branch_id_fk");
+        });
+
+        modelBuilder.Entity<Branch>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("branches_pkey");
+
+            entity.ToTable("branches");
+
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("gen_random_uuid()")
+                .HasColumnName("id");
+            entity.Property(e => e.CompanyId).HasColumnName("company_id");
+            entity.Property(e => e.IsDefault).HasColumnName("is_default");
+            entity.Property(e => e.LoadOptions)
+                .HasColumnType("jsonb")
+                .HasColumnName("load_options");
+            entity.Property(e => e.Name).HasColumnName("name");
+
+            entity.HasOne(d => d.Company).WithMany(p => p.Branches)
                 .HasForeignKey(d => d.CompanyId)
-                .HasConstraintName("categories_company_id_fk");
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("branches_company_id_fk");
         });
 
         modelBuilder.Entity<Company>(entity =>
@@ -65,9 +89,6 @@ public partial class PersonalAccountContext : DbContext
             entity.Property(e => e.Address).HasColumnName("address");
             entity.Property(e => e.Inn).HasColumnName("inn");
             entity.Property(e => e.Name).HasColumnName("name");
-            entity.Property(e => e.LoadOptions)
-                .HasColumnType("jsonb")
-                .HasColumnName("load_options");
         });
 
         modelBuilder.Entity<Emploee>(entity =>
@@ -79,13 +100,13 @@ public partial class PersonalAccountContext : DbContext
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("gen_random_uuid()")
                 .HasColumnName("id");
-            entity.Property(e => e.CompanyId).HasColumnName("company_id");
+            entity.Property(e => e.BranchId).HasColumnName("branch_id");
             entity.Property(e => e.Name).HasColumnName("name");
             entity.Property(e => e.Phone).HasColumnName("phone");
 
-            entity.HasOne(d => d.Company).WithMany(p => p.Emploees)
-                .HasForeignKey(d => d.CompanyId)
-                .HasConstraintName("emploees_company_id_fk");
+            entity.HasOne(d => d.Branch).WithMany(p => p.Emploees)
+                .HasForeignKey(d => d.BranchId)
+                .HasConstraintName("emploees_branch_id_fk");
         });
 
         modelBuilder.Entity<LinksUserCompany>(entity =>
@@ -97,12 +118,12 @@ public partial class PersonalAccountContext : DbContext
             entity.Property(e => e.Id)
                 .HasDefaultValueSql("gen_random_uuid()")
                 .HasColumnName("id");
-            entity.Property(e => e.CompanyId).HasColumnName("company_id");
+            entity.Property(e => e.BranchId).HasColumnName("branch_id");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
-            entity.HasOne(d => d.Company).WithMany(p => p.LinksUserCompanies)
-                .HasForeignKey(d => d.CompanyId)
-                .HasConstraintName("links_user_company_company_id_fk");
+            entity.HasOne(d => d.Branch).WithMany(p => p.LinksUserCompanies)
+                .HasForeignKey(d => d.BranchId)
+                .HasConstraintName("links_user_company_branch_id_fk");
 
             entity.HasOne(d => d.User).WithMany(p => p.LinksUserCompanies)
                 .HasForeignKey(d => d.UserId)
@@ -151,7 +172,7 @@ public partial class PersonalAccountContext : DbContext
                 .HasDefaultValueSql("gen_random_uuid()")
                 .HasColumnName("id");
             entity.Property(e => e.ChangePeriod).HasColumnName("change_period");
-            entity.Property(e => e.CompanyId).HasColumnName("company_id");
+            entity.Property(e => e.BranchId).HasColumnName("branch_id");
             entity.Property(e => e.Discount)
                 .HasPrecision(15, 2)
                 .HasColumnName("discount");
@@ -165,10 +186,10 @@ public partial class PersonalAccountContext : DbContext
                 .HasColumnName("quantity");
             entity.Property(e => e.TransactionType).HasColumnName("transaction_type");
 
-            entity.HasOne(d => d.Company).WithMany(p => p.Transactions)
-                .HasForeignKey(d => d.CompanyId)
+            entity.HasOne(d => d.Branch).WithMany(p => p.Transactions)
+                .HasForeignKey(d => d.BranchId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("transactions_company_id_fk");
+                .HasConstraintName("transactions_branch_id_fk");
 
             entity.HasOne(d => d.Emloee).WithMany(p => p.Transactions)
                 .HasForeignKey(d => d.EmloeeId)

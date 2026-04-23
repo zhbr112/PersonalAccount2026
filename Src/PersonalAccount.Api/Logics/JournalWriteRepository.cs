@@ -29,7 +29,8 @@ public class JournalWriteRepository : IServerRepository<JournalRowDto>
             quantity,
             price,
             discountamount,
-            company_id 
+            company_id,
+            branch_id
         ) 
         FROM STDIN (FORMAT BINARY)";
 
@@ -100,7 +101,9 @@ public class JournalWriteRepository : IServerRepository<JournalRowDto>
                 // discountamount
                 writer.Write( transaction.Discount , NpgsqlDbType.Double );
                 // company_id
-                writer.Write( options.Owner.Id, NpgsqlDbType.Uuid );
+                writer.Write(options.Branch.Company.Id, NpgsqlDbType.Uuid);
+                // branch_id
+                writer.Write(options.Branch.Id, NpgsqlDbType.Uuid);
             }
 
     		writer.Complete();

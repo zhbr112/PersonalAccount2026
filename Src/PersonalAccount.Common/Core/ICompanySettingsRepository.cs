@@ -16,9 +16,9 @@ public interface ICompanySettingsRepository
     /// <summary>
     /// Загрузить настройки.
     /// </summary>
-    /// <param name="company"></param>
+    /// <param name="branchId">Уникальный код филиала.</param>
     /// <returns></returns>
-    public LoadingSettingsModel Load(CompanyModel company);
+    public LoadingSettingsModel Load(Guid branchId);
 
     /// <summary>
     /// Сохранить настройки
@@ -31,8 +31,8 @@ public interface ICompanySettingsRepository
     /// <summary>
     /// Загрузить настройки
     /// </summary>
-    /// <param name="company"></param>
+    /// <param name="branchId">Уникальный код филиала.</param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task<LoadingSettingsModel> LoadAsync(CompanyModel company, CancellationToken token);
+    public Task<LoadingSettingsModel> LoadAsync(Guid branchId, CancellationToken token);
 }

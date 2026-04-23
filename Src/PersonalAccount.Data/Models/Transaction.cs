@@ -9,7 +9,7 @@ public partial class Transaction
 
     public int TransactionType { get; set; }
 
-    public Guid CompanyId { get; set; }
+    public Guid BranchId { get; set; }
 
     public DateTime ChangePeriod { get; set; }
 
@@ -23,7 +23,7 @@ public partial class Transaction
 
     public decimal? Discount { get; set; }
 
-    public virtual Company Company { get; set; } = null!;
+    public virtual Branch Branch { get; set; } = null!;
 
     public virtual Emploee? Emloee { get; set; }
 
