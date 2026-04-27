@@ -92,66 +92,9 @@ select count(*) from journal
 
 ### UML: диаграмма связей (классов)
 
-```mermaid
-classDiagram
-    class LoadingSettingsModel
-    class EmploeeModel
-    class NomenclatureModel
-    class CategoryModel
-
-    class INewDataBySettingsProvider~TData~ {
-      +GetNew(settings) IReadOnlyCollection~TData~
-      +GetNewAsync(settings, token) Task~IReadOnlyCollection~TData~~
-    }
-
-    class IReferenceDataBySettingsProvider {
-      +GetNewEmployees(settings) IReadOnlyCollection~EmploeeModel~
-      +GetNewNomenclatures(settings) IReadOnlyCollection~NomenclatureModel~
-      +GetNewGroups(settings) IReadOnlyCollection~CategoryModel~
-      +GetNewEmployeesAsync(settings, token) Task~IReadOnlyCollection~EmploeeModel~~
-      +GetNewNomenclaturesAsync(settings, token) Task~IReadOnlyCollection~NomenclatureModel~~
-      +GetNewGroupsAsync(settings, token) Task~IReadOnlyCollection~CategoryModel~~
-    }
-
-    class IReceivedDataWriter~TData~ {
-      +Write(data) bool
-      +WriteAsync(data, token) Task~bool~
-    }
-
-    INewDataBySettingsProvider --> LoadingSettingsModel : использует
-    IReferenceDataBySettingsProvider --> LoadingSettingsModel : использует
-    IReferenceDataBySettingsProvider --> EmploeeModel : возвращает
-    IReferenceDataBySettingsProvider --> NomenclatureModel : возвращает
-    IReferenceDataBySettingsProvider --> CategoryModel : возвращает
-```
+![](./6.png)
 
 ### UML: диаграмма последовательности
 
-```mermaid
-sequenceDiagram
-    participant Sync as Сервис синхронизации
-    participant DataProvider as INewDataBySettingsProvider<TData>
-    participant RefProvider as IReferenceDataBySettingsProvider
-    participant Writer as IReceivedDataWriter<TData>
-
-    Sync->>DataProvider: GetNew(settings)
-    DataProvider-->>Sync: newData
-    Sync->>Writer: Write(newData)
-    Writer-->>Sync: ok
-
-    Sync->>RefProvider: GetNewEmployees(settings)
-    RefProvider-->>Sync: employees
-    Sync->>Writer: Write(employees)
-    Writer-->>Sync: ok
-
-    Sync->>RefProvider: GetNewNomenclatures(settings)
-    RefProvider-->>Sync: nomenclatures
-    Sync->>Writer: Write(nomenclatures)
-    Writer-->>Sync: ok
-
-    Sync->>RefProvider: GetNewGroups(settings)
-    RefProvider-->>Sync: groups
-    Sync->>Writer: Write(groups)
-    Writer-->>Sync: ok
-```
+![](./7.png)
 
