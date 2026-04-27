@@ -70,3 +70,88 @@ select count(*) from journal
 
 
 
+## Проектирование интерфейсов инкрементальной загрузки справочников
+
+Добавлены следующие контракты в `Src/PersonalAccount.Common/Core`:
+
+- `INewDataBySettingsProvider<TData>` — универсальное получение набора новых данных по настройкам.
+- `IReferenceDataBySettingsProvider` — получение новых сотрудников, номенклатуры и групп по настройкам.
+- `IReceivedDataWriter<TData>` — запись полученных данных (синхронно и асинхронно).
+
+### Предполагаемый алгоритм реализации
+
+1. Получить текущие настройки загрузки (`LoadingSettingsModel`) для нужного филиала.
+2. На основании настроек (`StartPosition`, `BatchSize`, `Owner`) запросить:
+   - новых сотрудников;
+   - новую номенклатуру;
+   - новые группы.
+3. Проверить, что выборки не пустые, и при необходимости выполнить валидацию данных.
+4. Передать полученные наборы в реализации `IReceivedDataWriter<TData>` и сохранить их в целевое хранилище.
+5. После успешной записи обновить настройки инкрементальной загрузки (новая позиция, время синхронизации, служебные метрики).
+6. Вернуть результат синхронизации в вызывающий слой (успех/ошибка).
+
+### UML: диаграмма связей (классов)
+
+```mermaid
+classDiagram
+    class LoadingSettingsModel
+    class EmploeeModel
+    class NomenclatureModel
+    class CategoryModel
+
+    class INewDataBySettingsProvider~TData~ {
+      +GetNew(settings) IReadOnlyCollection~TData~
+      +GetNewAsync(settings, token) Task~IReadOnlyCollection~TData~~
+    }
+
+    class IReferenceDataBySettingsProvider {
+      +GetNewEmployees(settings) IReadOnlyCollection~EmploeeModel~
+      +GetNewNomenclatures(settings) IReadOnlyCollection~NomenclatureModel~
+      +GetNewGroups(settings) IReadOnlyCollection~CategoryModel~
+      +GetNewEmployeesAsync(settings, token) Task~IReadOnlyCollection~EmploeeModel~~
+      +GetNewNomenclaturesAsync(settings, token) Task~IReadOnlyCollection~NomenclatureModel~~
+      +GetNewGroupsAsync(settings, token) Task~IReadOnlyCollection~CategoryModel~~
+    }
+
+    class IReceivedDataWriter~TData~ {
+      +Write(data) bool
+      +WriteAsync(data, token) Task~bool~
+    }
+
+    INewDataBySettingsProvider --> LoadingSettingsModel : использует
+    IReferenceDataBySettingsProvider --> LoadingSettingsModel : использует
+    IReferenceDataBySettingsProvider --> EmploeeModel : возвращает
+    IReferenceDataBySettingsProvider --> NomenclatureModel : возвращает
+    IReferenceDataBySettingsProvider --> CategoryModel : возвращает
+```
+
+### UML: диаграмма последовательности
+
+```mermaid
+sequenceDiagram
+    participant Sync as Сервис синхронизации
+    participant DataProvider as INewDataBySettingsProvider<TData>
+    participant RefProvider as IReferenceDataBySettingsProvider
+    participant Writer as IReceivedDataWriter<TData>
+
+    Sync->>DataProvider: GetNew(settings)
+    DataProvider-->>Sync: newData
+    Sync->>Writer: Write(newData)
+    Writer-->>Sync: ok
+
+    Sync->>RefProvider: GetNewEmployees(settings)
+    RefProvider-->>Sync: employees
+    Sync->>Writer: Write(employees)
+    Writer-->>Sync: ok
+
+    Sync->>RefProvider: GetNewNomenclatures(settings)
+    RefProvider-->>Sync: nomenclatures
+    Sync->>Writer: Write(nomenclatures)
+    Writer-->>Sync: ok
+
+    Sync->>RefProvider: GetNewGroups(settings)
+    RefProvider-->>Sync: groups
+    Sync->>Writer: Write(groups)
+    Writer-->>Sync: ok
+```
+
